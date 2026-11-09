@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="resume-view-container">
+  <div class="projects-layout">
+    <!-- Left Filter Panel -->
+    <aside class="projects-filter-panel">
+      <div class="filter-group">
+        <h3>Tags</h3>
+        {% set all_tags = namespace(tags=set()) %}
+        {% for blog in blogs %}
+          {% for tag in blog.tags %}
+            {% set _ = all_tags.tags.add(tag) %}
+          {% endfor %}
+        {% endfor %}
+        {% for tag in all_tags.tags | sort %}
+        <label class="filter-checkbox">
+          <input type="checkbox" class="filter-tag" value="{{ tag }}">
+          #{{ tag }}
+        </label>
+        {% endfor %}
+      </div>
+      <button class="pill-btn filter-reset-btn" style="width: 100%; margin-top: 0.5rem;">Reset Filters</button>
+    </aside>
+
+    <!-- Project Cards -->
+    <div class="projects-cards-area">
+      <section class="resume-section">
+        <h2 class="resume-section-heading">Personal Projects</h2>
+        <div class="resume-section-divider"></div>
+        <p class="resume-text" style="margin-bottom: 2rem;">Deep dives, experiments, and case studies from my work in ML, Data Engineering, and Agentic AI.</p>
+
+        <div class="project-card-list" id="project-card-list">
+          {% for blog in blogs %}
+          <article class="project-card" data-tags="{{ blog.tags | join(',') }}">
+            <h3 class="project-card-title">{{ blog.title }}</h3>
+            <div class="project-card-association">
+              <span class="blog-card-topic">{{ blog.topic }}</span> &bull; {{ blog.date }} &bull; {{ blog.readTime }}
+            </div>
+            <p class="project-card-desc">{{ blog.summary }}</p>
+            <div class="project-card-tech">
+              {% for tag in blog.tags %}
+              <span class="tech-badge">#{{ tag }}</span>
+              {% endfor %}
+            </div>
+            <div class="project-card-links">
+              <a href="javascript:void(0)" class="project-card-link project-card-open" data-id="{{ blog.id }}">Read Case Study &rarr;</a>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Pass blog data to JS for detail reader -->
+<script>
+  var BLOG_DATA = {{ blogs | tojson }};
+</script>
+
+<script>
+  // Projects detail reader + filter
+  document.addEventListener('DOMContentLoaded', function () {
+    // Wire detail reader if available
+    if (window.detailReader) {
+      var openBtns = document.querySelectorAll('.project-card-open');
+      openBtns.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var id = this.getAttribute('data-id');
+          window.detailReader.openBlog(id);
+        });
+      });
+    }
+
+    // Filter logic
+    var tagCheckboxes = document.querySelectorAll('.filter-tag');
+    var cards = document.querySelectorAll('.project-card');
+    var resetBtn = document.querySelector('.filter-reset-btn');
+
+    function applyFilters() {
+      var activeTags = [];
+      tagCheckboxes.forEach(function (cb) { if (cb.checked) activeTags.push(cb.value); });
+      var filterActive = activeTags.length > 0;
+
+      cards.forEach(function (card) {
+        if (!filterActive) {
+          card.style.display = '';
+          return;
+        }
+        var cardTags = card.getAttribute('data-tags').split(',');
+        var match = activeTags.some(function (t) { return cardTags.indexOf(t) !== -1; });
+        card.style.display = match ? '' : 'none';
+      });
+    }
+
+    tagCheckboxes.forEach(function (cb) { cb.addEventListener('change', applyFilters); });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () {
+        tagCheckboxes.forEach(function (cb) { cb.checked = false; });
+        applyFilters();
+      });
+    }
+  });
+</script>
+{% endblock %}
