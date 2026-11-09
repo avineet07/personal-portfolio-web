@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if blogs is defined and blogs %}
 <div class="resume-view-container">
+{% else %}
+<div class="resume-view-container">
+  <p>No projects available.</p>
+{% endif %}
   <div class="projects-layout">
     <!-- Left Filter Panel -->
     <aside class="projects-filter-panel">
