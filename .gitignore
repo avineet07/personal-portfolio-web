@@ -1,5 +1,7 @@
-# Grounding documents (user references, raw zip bundles, etc.)
-ref/
+# Grounding documents: ignore raw files/zips, but track resume & cover letter folders
+ref/*
+!ref/resume/
+!ref/cover_letter/
 
 # Aider and tooling artifacts
 .aider*
