@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgChurn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d0a22"/>
+      <stop offset="100%" stop-color="#1a1236"/>
+    </linearGradient>
+    <pattern id="gridChurn" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+    </pattern>
+    <marker id="arwChurn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#818cf8"/>
+    </marker>
+    <filter id="shadowChurn" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="420" rx="12" fill="url(#bgChurn)"/>
+  <rect width="800" height="420" rx="12" fill="url(#gridChurn)"/>
+
+  <!-- Title -->
+  <rect x="50" y="30" width="138" height="30" rx="6" fill="#8b5cf6" opacity="0.15"/>
+  <text x="65" y="50" fill="#d8b4fe" font-family="'Outfit', sans-serif" font-weight="600" font-size="12" letter-spacing="1.5">PREDICTIVE ML</text>
+  <text x="50" y="90" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="700" font-size="20">Model Pipeline to Retention Action</text>
+
+  <!-- 1. Ingest -->
+  <g transform="translate(50, 110)" filter="url(#shadowChurn)">
+    <rect width="150" height="170" rx="10" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#8b5cf6" opacity="0.15"/>
+    <text x="18" y="26" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">INGEST</text>
+    <ellipse cx="60" cy="50" rx="17" ry="7" fill="none" stroke="#a5b4fc" stroke-width="2"/>
+    <path d="M 43 50 L 77 50" stroke="#a5b4fc" stroke-width="2"/>
+    <path d="M 43 50 L 43 68 M 77 50 L 77 68" stroke="#a5b4fc" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Transaction Telemetry</text>
+    <text x="14" y="122" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="10">Card Event Streams</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Rolling 12M Cohorts</text>
+  </g>
+
+  <path d="M 208 195 L 222 195" stroke="#818cf8" stroke-width="2" marker-end="url(#arwChurn)"/>
+
+  <!-- 2. Features -->
+  <g transform="translate(230, 110)" filter="url(#shadowChurn)">
+    <rect width="150" height="170" rx="10" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#8b5cf6" opacity="0.15"/>
+    <text x="18" y="26" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">FEATURES</text>
+    <path d="M 45 50 L 60 42 L 75 50 L 60 58 Z" fill="none" stroke="#c084fc" stroke-width="2"/>
+    <path d="M 45 58 L 60 66 L 75 58" fill="none" stroke="#c084fc" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Feature Engineering</text>
+    <text x="14" y="122" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="10">Behavioral Velocities</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Category Entropy</text>
+  </g>
+
+  <!-- 3. Model -->
+  <g transform="translate(410, 110)" filter="url(#shadowChurn)">
+    <rect width="150" height="170" rx="10" fill="#1e1b4b" stroke="#ec4899" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#ec4899" opacity="0.15"/>
+    <text x="18" y="26" fill="#f9a8d4" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">MODEL</text>
+    <circle cx="60" cy="58" r="15" fill="none" stroke="#f472b6" stroke-width="2"/>
+    <circle cx="60" cy="58" r="8" fill="none" stroke="#f9a8d4" stroke-width="2"/>
+    <circle cx="60" cy="58" r="2" fill="#f9a8d4"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Gradient Boost</text>
+    <text x="14" y="122" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="10">Risk Scoring</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">AUC-ROC 0.89</text>
+  </g>
+
+  <path d="M 568 195 L 582 195" stroke="#f472b6" stroke-width="2" marker-end="url(#arwChurn)"/>
+
+  <!-- 4. Action -->
+  <g transform="translate(590, 110)" filter="url(#shadowChurn)">
+    <rect width="150" height="170" rx="10" fill="#1e1b4b" stroke="#10b981" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#10b981" opacity="0.15"/>
+    <text x="18" y="26" fill="#6ee7b7" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">ACTION</text>
+    <path d="M 52 66 L 60 48 L 68 66" fill="none" stroke="#34d399" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Retention Trigger</text>
+    <text x="14" y="122" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="10">CRM Automation</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">+14% Re-engaged</text>
+  </g>
+
+  <!-- Bottom metric pills -->
+  <g transform="translate(50, 335)">
+    <rect width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="15" y="24" fill="#a78bfa" font-family="'Inter', sans-serif" font-weight="700" font-size="15">84% Accuracy</text>
+    <text x="15" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Binary Churn Classifier</text>
+
+    <rect x="200" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="215" y="24" fill="#34d399" font-family="'Inter', sans-serif" font-weight="700" font-size="15">+14% Retention</text>
+    <text x="215" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Automated Re-engagement</text>
+
+    <rect x="350" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="365" y="24" fill="#38bdf8" font-family="'Inter', sans-serif" font-weight="700" font-size="15">0.89 AUC-ROC</text>
+    <text x="365" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Out-of-Time Test Set</text>
+
+    <rect x="500" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="515" y="24" fill="#fbbf24" font-family="'Inter', sans-serif" font-weight="700" font-size="15">-40% Cost</text>
+    <text x="515" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Warehouse Compute Spend</text>
+  </g>
+</svg>

@@ -1,24 +1,28 @@
 {% extends "base.html" %}
+{% from "components/content_card.html" import render_content_card %}
 
 {% block content %}
-{% if blogs is defined and blogs %}
 <div class="resume-view-container">
-{% else %}
-<div class="resume-view-container">
+  {% if not blogs %}
   <p>No projects available.</p>
-{% endif %}
+  {% else %}
   <div class="projects-layout">
     <!-- Left Filter Panel -->
     <aside class="projects-filter-panel">
       <div class="filter-group">
-        <h3>Tags</h3>
-        {% set all_tags = namespace(tags=set()) %}
-        {% for blog in blogs %}
-          {% for tag in blog.tags %}
-            {% set _ = all_tags.tags.add(tag) %}
-          {% endfor %}
-        {% endfor %}
-        {% for tag in all_tags.tags | sort %}
+        <h3>Sort By</h3>
+        <select class="sort-select" id="sort-select" aria-label="Sort project articles">
+          <option value="default">Default Order</option>
+          <option value="date-desc">Newest First</option>
+          <option value="date-asc">Oldest First</option>
+          <option value="read-time-asc">Shortest Read</option>
+          <option value="read-time-desc">Longest Read</option>
+          <option value="title-asc">Title (A – Z)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <h3>Filter by Tag</h3>
+        {% for tag in all_tags %}
         <label class="filter-checkbox">
           <input type="checkbox" class="filter-tag" value="{{ tag }}">
           #{{ tag }}
@@ -31,32 +35,19 @@
     <!-- Project Cards -->
     <div class="projects-cards-area">
       <section class="resume-section">
-        <h2 class="resume-section-heading">Personal Projects</h2>
+        <h2 class="resume-section-heading">Personal Projects & Deep Dives</h2>
         <div class="resume-section-divider"></div>
-        <p class="resume-text" style="margin-bottom: 2rem;">Deep dives, experiments, and case studies from my work in ML, Data Engineering, and Agentic AI.</p>
+        <p class="resume-text" style="margin-bottom: 2rem;">Production architectures, experiments, and case studies in Agentic AI, Data Mesh, and Predictive Modeling.</p>
 
-        <div class="project-card-list" id="project-card-list">
+        <div class="project-card-list content-card-list" id="project-card-list">
           {% for blog in blogs %}
-          <article class="project-card" data-tags="{{ blog.tags | join(',') }}">
-            <h3 class="project-card-title">{{ blog.title }}</h3>
-            <div class="project-card-association">
-              <span class="blog-card-topic">{{ blog.topic }}</span> &bull; {{ blog.date }} &bull; {{ blog.readTime }}
-            </div>
-            <p class="project-card-desc">{{ blog.summary }}</p>
-            <div class="project-card-tech">
-              {% for tag in blog.tags %}
-              <span class="tech-badge">#{{ tag }}</span>
-              {% endfor %}
-            </div>
-            <div class="project-card-links">
-              <a href="javascript:void(0)" class="project-card-link project-card-open" data-id="{{ blog.id }}">Read Case Study &rarr;</a>
-            </div>
-          </article>
+          {{ render_content_card(blog, loop.index0) }}
           {% endfor %}
         </div>
       </section>
     </div>
   </div>
+  {% endif %}
 </div>
 
 <!-- Pass blog data to JS for detail reader -->
@@ -65,24 +56,74 @@
 </script>
 
 <script>
-  // Projects detail reader + filter
   document.addEventListener('DOMContentLoaded', function () {
-    // Wire detail reader if available
-    if (window.detailReader) {
-      var openBtns = document.querySelectorAll('.project-card-open');
-      openBtns.forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          var id = this.getAttribute('data-id');
-          window.detailReader.openBlog(id);
+    // Wire detail reader
+    var reader = (typeof getDetailReader === 'function') ? getDetailReader() : window.detailReader;
+    var openBtns = document.querySelectorAll('.project-card-open');
+    openBtns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id = this.getAttribute('data-id');
+        var r = reader || (typeof getDetailReader === 'function' ? getDetailReader() : window.detailReader);
+        if (r && id) r.openBlog(id);
+      });
+    });
+
+    // Also make clicking the card open the case study
+    var cards = document.querySelectorAll('.project-card');
+    cards.forEach(function (card) {
+      card.addEventListener('click', function (e) {
+        if (e.target.tagName.toLowerCase() === 'video' || e.target.tagName.toLowerCase() === 'button' || e.target.closest('.card-related-chip')) return;
+        var btn = card.querySelector('.project-card-open');
+        if (btn) {
+          var id = btn.getAttribute('data-id');
+          var r = reader || (typeof getDetailReader === 'function' ? getDetailReader() : window.detailReader);
+          if (r && id) r.openBlog(id);
+        }
+      });
+    });
+
+    // Related cards chip click
+    var chips = document.querySelectorAll('.card-related-chip');
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id = this.getAttribute('data-id');
+        var r = reader || (typeof getDetailReader === 'function' ? getDetailReader() : window.detailReader);
+        if (r && id) r.openLinked(id);
+      });
+    });
+
+    // Sort logic
+    var sortSelect = document.getElementById('sort-select');
+    var cardContainer = document.getElementById('project-card-list');
+    if (sortSelect && cardContainer) {
+      sortSelect.addEventListener('change', function () {
+        var val = this.value;
+        var cardsArr = Array.prototype.slice.call(cardContainer.querySelectorAll('.project-card'));
+        cardsArr.sort(function (a, b) {
+          if (val === 'date-desc') {
+            return (parseInt(b.getAttribute('data-timestamp') || 0, 10)) - (parseInt(a.getAttribute('data-timestamp') || 0, 10));
+          } else if (val === 'date-asc') {
+            return (parseInt(a.getAttribute('data-timestamp') || 0, 10)) - (parseInt(b.getAttribute('data-timestamp') || 0, 10));
+          } else if (val === 'read-time-asc') {
+            return (parseInt(a.getAttribute('data-read-time') || 0, 10)) - (parseInt(b.getAttribute('data-read-time') || 0, 10));
+          } else if (val === 'read-time-desc') {
+            return (parseInt(b.getAttribute('data-read-time') || 0, 10)) - (parseInt(a.getAttribute('data-read-time') || 0, 10));
+          } else if (val === 'title-asc') {
+            return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '');
+          } else {
+            return (parseInt(a.getAttribute('data-order') || 0, 10)) - (parseInt(b.getAttribute('data-order') || 0, 10));
+          }
         });
+        cardsArr.forEach(function (card) { cardContainer.appendChild(card); });
       });
     }
 
     // Filter logic
     var tagCheckboxes = document.querySelectorAll('.filter-tag');
-    var cards = document.querySelectorAll('.project-card');
     var resetBtn = document.querySelector('.filter-reset-btn');
 
     function applyFilters() {
@@ -95,7 +136,7 @@
           card.style.display = '';
           return;
         }
-        var cardTags = card.getAttribute('data-tags').split(',');
+        var cardTags = (card.getAttribute('data-tags') || '').split(',');
         var match = activeTags.some(function (t) { return cardTags.indexOf(t) !== -1; });
         card.style.display = match ? '' : 'none';
       });
@@ -106,6 +147,10 @@
     if (resetBtn) {
       resetBtn.addEventListener('click', function () {
         tagCheckboxes.forEach(function (cb) { cb.checked = false; });
+        if (sortSelect) {
+          sortSelect.value = 'default';
+          sortSelect.dispatchEvent(new Event('change'));
+        }
         applyFilters();
       });
     }

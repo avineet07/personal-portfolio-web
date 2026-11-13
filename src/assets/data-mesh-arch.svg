@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgMesh" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <pattern id="gridMesh" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+    </pattern>
+    <marker id="arwMesh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+    </marker>
+    <filter id="shadowMesh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="420" rx="12" fill="url(#bgMesh)"/>
+  <rect width="800" height="420" rx="12" fill="url(#gridMesh)"/>
+
+  <!-- Title -->
+  <rect x="50" y="30" width="168" height="30" rx="6" fill="#14b8a6" opacity="0.15"/>
+  <text x="65" y="50" fill="#5eead4" font-family="'Outfit', sans-serif" font-weight="600" font-size="12" letter-spacing="1.5">DATA PRODUCT</text>
+  <text x="50" y="90" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="700" font-size="20">Domain-Oriented Data Mesh</text>
+
+  <!-- 1. Domain A -->
+  <g transform="translate(50, 110)" filter="url(#shadowMesh)">
+    <rect width="150" height="170" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#3b82f6" opacity="0.15"/>
+    <text x="18" y="26" fill="#93c5fd" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">DOMAIN A</text>
+    <circle cx="48" cy="58" r="13" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <circle cx="72" cy="58" r="13" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <path d="M 61 52 L 67 58 L 61 64" fill="none" stroke="#60a5fa" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Risk &amp; Underwriting</text>
+    <text x="14" y="122" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Credit Scoring Engine</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Limit Sizing Model</text>
+  </g>
+
+  <path d="M 208 195 L 222 195" stroke="#38bdf8" stroke-width="2" marker-end="url(#arwMesh)"/>
+
+  <!-- 2. Domain B -->
+  <g transform="translate(230, 110)" filter="url(#shadowMesh)">
+    <rect width="150" height="170" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#10b981" opacity="0.15"/>
+    <text x="18" y="26" fill="#6ee7b7" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">DOMAIN B</text>
+    <path d="M 45 50 L 60 42 L 75 50 L 60 58 Z" fill="none" stroke="#34d399" stroke-width="2"/>
+    <path d="M 45 58 L 60 66 L 75 58" fill="none" stroke="#6ee7b7" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Product &amp; Growth</text>
+    <text x="14" y="122" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Acquisition Funnel</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Merchant Spend</text>
+  </g>
+
+  <!-- 3. Data Product -->
+  <g transform="translate(410, 110)" filter="url(#shadowMesh)">
+    <rect width="150" height="170" rx="10" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#8b5cf6" opacity="0.15"/>
+    <text x="18" y="26" fill="#c4b5fd" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">DATA PRODUCT</text>
+    <rect x="46" y="46" width="28" height="24" rx="3" fill="none" stroke="#a78bfa" stroke-width="2"/>
+    <path d="M 46 56 L 74 56" stroke="#a78bfa" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Data Product</text>
+    <text x="14" y="122" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="10">Transformed / Governed</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Lineage Catalogued</text>
+  </g>
+
+  <path d="M 568 195 L 582 195" stroke="#c084fc" stroke-width="2" marker-end="url(#arwMesh)"/>
+
+  <!-- 4. Platform -->
+  <g transform="translate(590, 110)" filter="url(#shadowMesh)">
+    <rect width="150" height="170" rx="10" fill="#1e293b" stroke="#14b8a6" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#14b8a6" opacity="0.15"/>
+    <text x="18" y="26" fill="#5eead4" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">PLATFORM</text>
+    <circle cx="60" cy="58" r="15" fill="none" stroke="#2dd4bf" stroke-width="2"/>
+    <path d="M 60 48 L 60 44 M 60 72 L 60 68 M 50 58 L 46 58 M 74 58 L 70 58 M 53 51 L 50 48 M 70 65 L 73 68 M 53 65 L 50 68 M 70 51 L 73 48" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Self-serve Platform</text>
+    <text x="14" y="122" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">BI &amp; Dashboards</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Federated Access</text>
+  </g>
+
+  <!-- Bottom metric pills -->
+  <g transform="translate(50, 335)">
+    <rect width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="15" y="24" fill="#34d399" font-family="'Inter', sans-serif" font-weight="700" font-size="15">+30% Adoption</text>
+    <text x="15" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Self-serve Data Platform</text>
+
+    <rect x="200" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="215" y="24" fill="#38bdf8" font-family="'Inter', sans-serif" font-weight="700" font-size="15">17 to 19%</text>
+    <text x="215" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Net Interest Yield Lift</text>
+
+    <rect x="350" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="365" y="24" fill="#a78bfa" font-family="'Inter', sans-serif" font-weight="700" font-size="15">100% Owned</text>
+    <text x="365" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Domain Squad Ownership</text>
+
+    <rect x="500" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="515" y="24" fill="#fbbf24" font-family="'Inter', sans-serif" font-weight="700" font-size="15">Zero Bottlenecks</text>
+    <text x="515" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Decentralized Delivery</text>
+  </g>
+</svg>

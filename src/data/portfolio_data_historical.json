@@ -1,0 +1,184 @@
+{
+  "version": "1.0",
+  "profile": {
+    "name": "Ashish Vineet",
+    "headline": "AI/ML, Data Science, Data Engineering & Analytics Professional",
+    "linkedin": "linkedin.com/in/ashish-vineet",
+    "github": "github.com/ashishvineet",
+    "email": "ashishvineet07@gmail.com",
+    "location": "Mumbai, India",
+    "skills": {
+      "languages": [
+        "Python",
+        "SQL",
+        "Bash",
+        "R"
+      ],
+      "mlAi": [
+        "LLMs",
+        "LangGraph",
+        "Prompt Engineering",
+        "Agentic AI",
+        "LightGBM",
+        "Supervised/Unsupervised Learning",
+        "Neural Networks",
+        "NLP",
+        "Feature Engineering",
+        "A/B Testing",
+        "Hypothesis Testing"
+      ],
+      "dataEngineering": [
+        "dbt",
+        "pySpark",
+        "Snowflake",
+        "PostgreSQL",
+        "MySQL",
+        "MongoDB",
+        "ETL/ELT Pipelines",
+        "Snowpipe",
+        "Apache Airflow",
+        "AWS DMS",
+        "Amazon S3",
+        "Docker",
+        "Matillion",
+        "Data Modeling"
+      ],
+      "analyticsAndBusiness": [
+        "Apache Superset",
+        "Tableau",
+        "Looker",
+        "Google Data Studio",
+        "Excel",
+        "Data Products",
+        "Data Mesh",
+        "Agile / Scrum",
+        "Data Strategy",
+        "KPIs & OKRs",
+        "Roadmap Planning",
+        "LTV/CAC Analysis"
+      ]
+    }
+  },
+  "resume": {
+    "introduction": "7+ years of experience in different spheres of the data-driven decision making lifecycle. Worked across several verticals like Retail, Fintech as well as Consulting, contributing to insightful actions in multiple market geographies. Passionate about Artificial Intelligence, Data Products and Analytics Engineering to create business impact.",
+    "headline": "AI/ML, Data Science, Data Engineering & Analytics Professional",
+    "pillars": [
+      {
+        "tag": "AI/ML",
+        "title": "Agentic AI for Production Workflows",
+        "description": [
+          "Stateful cyclic agent graphs for voice AI built with LangGraph. Including conditional routing, Human-in-the-Loop (HITL) checkpoints.",
+          "Custom pipelines for evaluation based on workflow adherence, hallucination and accuracy.",
+          "High-dimensional data serving using MCP for non-happy outliers in workflows."
+        ]
+      },
+      {
+        "tag": "DATA-DRIVEN DECISION MAKING ARCHITECTURE",
+        "title": "Enterprise Data Mesh",
+        "description": [
+          "Domain-oriented data ownership for each business functions.",
+          "Data marts for Customer 360 view with standardized feature definitions on org level.",
+          "Federated schema governance through Rule Engines enabling self-serve analytics.",
+          "Served multiple live app features with the help of a blazing fast API layer."
+        ]
+      },
+      {
+        "tag": "MACHINE LEARNING",
+        "title": "Predictive ML for Customer Engagement & Retention",
+        "description": [
+          "High-volume transaction feature engineering, LightGBM tree classifiers, propensity modeling, A/B testing on re-engagement hypothesis.",
+          "Campaign Analytics based on Design of Experiments (DoE) with causal studies."
+        ]
+      },
+      {
+        "tag": "DATA PLATFORM ENGINEERING",
+        "title": "Data Pipelines & Data Warehousing",
+        "description": [
+          "Event-driven Change Data Capture (CDC) via AWS DMS.",
+          "Stored Procedure development to auto-deploy data pipelines using S3 micro-batches, Snowpipe auto-ingestion, and Snowflake Streams.",
+          "dbt for semantic layer and single source of truth."
+        ]
+      }
+    ],
+    "workExperience": [
+      {
+        "role": "Senior Technical Associate",
+        "company": "Sears Holdings",
+        "location": "Hyderabad, India",
+        "period": "May 2024 – Present",
+        "category": "AI/ML & Analytics",
+        "summary": "Engineering LangGraph Agentic AI workflows with HITL breakpoints, custom chatbot evaluators, and low latency Snowflake CDC data pipelines.",
+        "bullets": [
+          "Architecting a multi-agent Agentic AI system utilizing LangGraph to automate business top-funnel, engineering conditional routing for multi-intent workflows.",
+          "Developing LLM-based solutions using Azure OpenAI (o3-mini) for voice chatbot evaluation, including sentiment analysis, workflow adherence, and hallucination detection (boosting accuracy by 10% through prompt engineering).",
+          "Engineering refined downstream tables in Snowflake data warehouse using stages, pipes, tasks, and streams.",
+          "Migrating orchestration and execution pipelines from Matillion to Amazon DMS CDC → S3 → Snowpipe architecture.",
+          "Optimizing query performance by 2-3x through indexing, clustering, partitioning, and UPSERT operations."
+        ]
+      },
+      {
+        "role": "Data Scientist & Data Product Manager",
+        "company": "OneCard",
+        "location": "Pune, India",
+        "period": "Jan 2021 – May 2024",
+        "category": "Product & ML",
+        "summary": "Built data products facilitating decision making on multiple top and bottom line business use cases; advanced analytics and ML on credit card portfolio.",
+        "bullets": [
+          "Developed a data-driven decision making platform for enterprise-scale analytics, implementing Data Mesh architecture to drive internal adoption.",
+          "Designed and delivered end-to-end data products combining ETL, APIs, and ML models, boosting feature adoption by 30% and lifting revenue yields from 17% to 19%.",
+          "Built LightGBM machine learning models achieving 84% accuracy for customer churn prediction and spend dormancy.",
+          "Created supervised models (Logistic Regression, Decision Trees) for credit risk, propensity modeling, and segmentation.",
+          "Implemented targeted marketing campaigns using ML insights, yielding a 14% user re-engagement and portfolio retention improvement.",
+          "Designed LTV/CAC analyses and funnel dashboards using Apache Superset and Google Data Studio."
+        ]
+      },
+      {
+        "role": "Associate Consultant",
+        "company": "Auronova Consulting",
+        "location": "Mumbai, India",
+        "period": "Sep 2019 – Dec 2020",
+        "category": "Risk Analytics",
+        "summary": "Automated risk analytics processes with Python/SQL and delivered real-time executive performance dashboards for financial institutions.",
+        "bullets": [
+          "Leveraged Python and SQL for end-to-end process automation of risk analyses, dashboards, and churn model development.",
+          "Developed real-time interactive dashboards enabling client-side metrics tracking and performance monitoring."
+        ]
+      }
+    ],
+    "internships": [
+      {
+        "role": "Data Science Intern",
+        "company": "Fractal Analytics",
+        "location": "Mumbai, India",
+        "period": "May 2018 – Jul 2018",
+        "description": "Developed knowledge graph and process mining prototypes, and exploratory predictive analytics during formative engineering internships."
+      },
+      {
+        "role": "Intern",
+        "company": "Genpact",
+        "location": "Bengaluru, India",
+        "period": "May 2017 – Jul 2017",
+        "description": "Developed knowledge graph and process mining prototypes, and exploratory predictive analytics during formative engineering internships."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Dual Degree (B.Tech + M.Tech)",
+        "institution": "Indian Institute of Technology, IIT Kharagpur",
+        "period": "Jul 2014 – Aug 2019",
+        "field": "Metallurgical and Materials Engineering"
+      }
+    ],
+    "title": "Ashish Vineet | Data Scientist & Data Product Portfolio",
+    "meta_description": "Portfolio of Ashish Vineet, a Data Scientist and Data Product Manager with 5+ years of experience in ML, AI, Data Engineering, and Advanced Analytics."
+  },
+  "content_meta": {
+    "matched_work_count": 3,
+    "scaffolded_cases": []
+  },
+  "generated_at": "2026-11-11T20:57:53.298194+00:00",
+  "source_documents": {
+    "resume": "CV_AshishVineet.pdf",
+    "cover_letter": "Ashish Vineet Cover Letter.pdf"
+  }
+}

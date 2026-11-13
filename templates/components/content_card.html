@@ -1,0 +1,98 @@
+{% macro render_content_card(item, loop_index=0) %}
+<article class="content-card {% if item.type == 'work' %}work-card{% else %}project-card{% endif %}"
+  data-id="{{ item.id }}"
+  data-type="{{ item.type or 'work' }}"
+  data-company="{{ item.company or '' }}"
+  data-category="{{ item.category or item.topic or '' }}"
+  data-tags="{{ (item.tags or item.techStack or []) | join(',') }}"
+  data-order="{{ loop_index }}"
+  data-timestamp="{{ item.sort_timestamp or 0 }}"
+  data-read-time="{{ item.read_time_minutes or 5 }}"
+  data-title="{{ item.title | lower }}">
+
+  {% if item.media and item.media.src %}
+  <div class="card-media-wrapper">
+    {% if item.media.type == 'video' %}
+    <video class="card-video" poster="{{ item.media.poster or '' }}" controls playsinline preload="none">
+      <source src="{{ item.media.src }}" type="video/mp4">
+    </video>
+    {% else %}
+    <img class="card-image" src="{{ item.media.src }}" alt="{{ item.media.alt or item.title }}" loading="lazy" />
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="card-body">
+    <!-- Top Metadata Header -->
+    <div class="card-top-meta">
+      <div class="card-badges-group">
+        <span class="card-category-badge">{{ item.category or item.topic or 'Engineering' }}</span>
+        <span class="card-type-badge {% if item.type == 'work' %}type-work{% else %}type-project{% endif %}">
+          {% if item.type == 'work' %}💼 Work Case{% else %}🚀 Project{% endif %}
+        </span>
+      </div>
+      <span class="card-time-badge">
+        {% if item.period %}{{ item.period }}{% elif item.date %}{{ item.date }}{% endif %}
+        {% if item.readTime %} &bull; {{ item.readTime }}{% endif %}
+      </span>
+    </div>
+
+    <!-- Title -->
+    <h3 class="card-title">{{ item.title }}</h3>
+
+    <!-- Organization & Role -->
+    {% if item.company or item.role %}
+    <div class="card-org-role">
+      <strong>{{ item.company or 'Personal Project' }}</strong>
+      {% if item.role %} &bull; <span>{{ item.role }}</span>{% endif %}
+      {% if item.location %} &bull; <span class="card-location">{{ item.location }}</span>{% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Summary -->
+    <p class="card-summary">{{ item.summary }}</p>
+
+    <!-- Key Metrics / Highlights -->
+    {% if item.metrics and item.metrics | length > 0 %}
+    <div class="card-metrics-grid">
+      {% for m in item.metrics %}
+      <span class="card-metric-pill">✦ {{ m }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Tech Stack / Tags -->
+    {% set card_tags = item.techStack or item.tags or [] %}
+    {% if card_tags and card_tags | length > 0 %}
+    <div class="card-tags">
+      {% for tech in card_tags %}
+      <span class="tech-badge">#{{ tech }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Connected Studies Pill Bar -->
+    {% if item.related_items and item.related_items | length > 0 %}
+    <div class="card-connected-box">
+      <span class="connected-label">🔗 Connected:</span>
+      <div class="connected-pills">
+        {% for rel in item.related_items %}
+        <button type="button" class="connected-pill card-related-chip" data-id="{{ rel.id }}" title="Open connected: {{ rel.title }}">
+          <span class="pill-type">{% if rel.type == 'work' %}💼 Work{% else %}🚀 Project{% endif %}</span>
+          <span class="pill-name">{{ rel.title }}</span>
+          <span class="pill-arrow">&rarr;</span>
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Action Link -->
+    <div class="card-action-bar">
+      <a href="javascript:void(0)" class="card-link-action content-card-open {% if item.type == 'work' %}work-card-open{% else %}project-card-open{% endif %}" data-id="{{ item.id }}" data-type="{{ item.type or 'work' }}">
+        Read Full {% if item.type == 'work' %}Case Study{% else %}Technical Deep Dive{% endif %} &rarr;
+      </a>
+    </div>
+  </div>
+</article>
+{% endmacro %}

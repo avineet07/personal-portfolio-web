@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgCdc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b132b"/>
+      <stop offset="100%" stop-color="#1c2541"/>
+    </linearGradient>
+    <pattern id="gridCdc" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+    </pattern>
+    <marker id="arwCdc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arwRet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+    <filter id="shadowCdc" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="420" rx="12" fill="url(#bgCdc)"/>
+  <rect width="800" height="420" rx="12" fill="url(#gridCdc)"/>
+
+  <!-- Title -->
+  <rect x="50" y="30" width="152" height="30" rx="6" fill="#06b6d4" opacity="0.15"/>
+  <text x="65" y="50" fill="#67e8f9" font-family="'Outfit', sans-serif" font-weight="600" font-size="12" letter-spacing="1.5">DATA PIPELINE</text>
+  <text x="50" y="90" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="700" font-size="20">Production to Reverse ETL</text>
+
+  <!-- 1. Production -->
+  <g transform="translate(50, 110)" filter="url(#shadowCdc)">
+    <rect width="120" height="170" rx="10" fill="#1e293b" stroke="#06b6d4" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#06b6d4" opacity="0.15"/>
+    <text x="18" y="26" fill="#93c5fd" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">PRODUCTION</text>
+    <ellipse cx="60" cy="50" rx="17" ry="7" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <path d="M 43 50 L 77 50 M 43 50 L 43 68 M 77 50 L 77 68" stroke="#38bdf8" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Source Systems</text>
+    <text x="14" y="122" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">CRM / Core Banking</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Transaction Logs</text>
+  </g>
+
+  <path d="M 178 195 L 192 195" stroke="#38bdf8" stroke-width="2" marker-end="url(#arwCdc)"/>
+
+  <!-- 2. Capture -->
+  <g transform="translate(195, 110)" filter="url(#shadowCdc)">
+    <rect width="120" height="170" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#f59e0b" opacity="0.15"/>
+    <text x="18" y="26" fill="#fcd34d" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">CAPTURE</text>
+    <path d="M 47 62 a 10 10 0 0 1 2 -19 a 13 13 0 0 1 25 -4 a 9 9 0 0 1 1 19 z" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">CDC Streaming</text>
+    <text x="14" y="122" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Zero-Polling WAL</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Micro-Batch Flush</text>
+  </g>
+
+  <!-- 3. Lakehouse -->
+  <g transform="translate(340, 110)" filter="url(#shadowCdc)">
+    <rect width="120" height="170" rx="10" fill="#1e293b" stroke="#06b6d4" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#06b6d4" opacity="0.15"/>
+    <text x="18" y="26" fill="#93c5fd" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">LAKESHORE</text>
+    <path d="M 45 50 L 60 42 L 75 50 L 60 58 Z" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <path d="M 45 58 L 60 66 L 75 58" fill="none" stroke="#67e8f9" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Immutable Storage</text>
+    <text x="14" y="122" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Parquet Landing</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Event-driven Triggers</text>
+  </g>
+
+  <path d="M 468 195 L 482 195" stroke="#38bdf8" stroke-width="2" marker-end="url(#arwCdc)"/>
+
+  <!-- 4. Data Product -->
+  <g transform="translate(490, 110)" filter="url(#shadowCdc)">
+    <rect width="120" height="170" rx="10" fill="#1e1b4b" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#3b82f6" opacity="0.15"/>
+    <text x="18" y="26" fill="#93c5fd" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">DATA PRODUCT</text>
+    <rect x="46" y="46" width="28" height="24" rx="3" fill="none" stroke="#60a5fa" stroke-width="2"/>
+    <path d="M 46 56 L 74 56" stroke="#93c5fd" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Data Product</text>
+    <text x="14" y="122" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="10">SCD Type 2 Merges</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Governed Schema</text>
+  </g>
+
+  <path d="M 618 195 L 632 195" stroke="#38bdf8" stroke-width="2" marker-end="url(#arwCdc)"/>
+
+  <!-- 5. Action Systems (reverse ETL) -->
+  <g transform="translate(640, 110)" filter="url(#shadowCdc)">
+    <rect width="120" height="170" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+    <rect x="12" y="12" width="76" height="20" rx="4" fill="#10b981" opacity="0.15"/>
+    <text x="18" y="26" fill="#6ee7b7" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="0.8">ACTION</text>
+    <path d="M 52 66 L 60 48 L 68 66" fill="none" stroke="#34d399" stroke-width="2"/>
+    <text x="14" y="100" fill="#f8fafc" font-family="'Inter', sans-serif" font-weight="600" font-size="12.5">Action Systems</text>
+    <text x="14" y="122" fill="#cbd5e1" font-family="'Inter', sans-serif" font-size="10">CRM / Ops Systems</text>
+    <text x="14" y="138" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10">Real-time Write-back</text>
+  </g>
+
+  <!-- Reverse ETL return loop -->
+  <path d="M 690 280 L 690 305 L 110 305 L 110 280" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#arwRet)"/>
+  <text x="400" y="309" text-anchor="middle" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="10" font-weight="600" letter-spacing="0.8">REVERSE ETL LOOP</text>
+
+  <!-- Bottom metric pills -->
+  <g transform="translate(50, 335)">
+    <rect width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="15" y="24" fill="#38bdf8" font-family="'Inter', sans-serif" font-weight="700" font-size="15">2x to 3x</text>
+    <text x="15" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Dashboard Query Latency</text>
+
+    <rect x="200" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="215" y="24" fill="#34d399" font-family="'Inter', sans-serif" font-weight="700" font-size="15">-40% Cost</text>
+    <text x="215" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Warehouse Compute Spend</text>
+
+    <rect x="350" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="365" y="24" fill="#fbbf24" font-family="'Inter', sans-serif" font-weight="700" font-size="15">Under 60s</text>
+    <text x="365" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Data Freshness</text>
+
+    <rect x="500" y="0" width="160" height="50" rx="8" fill="#111827" stroke="#334155" stroke-width="1"/>
+    <text x="515" y="24" fill="#a78bfa" font-family="'Inter', sans-serif" font-weight="700" font-size="15">Zero Polling</text>
+    <text x="515" y="40" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="11">Transaction Load Removed</text>
+  </g>
+</svg>

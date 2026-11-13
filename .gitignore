@@ -1,0 +1,24 @@
+# Grounding documents (user references, raw zip bundles, etc.)
+ref/
+
+# Aider and tooling artifacts
+.aider*
+
+# Python artifacts
+*.pyc
+__pycache__/
+.venv/
+
+# Build & deployment outputs
+dist/
+.wrangler/
+
+# Environment variables
+.env
+.env.local
+!.env.example
+
+# OS & Editor artifacts
+.DS_Store
+.vscode/
+.zed/

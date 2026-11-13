@@ -1,0 +1,11 @@
+# Web Application & Templating
+Flask>=3.0.0
+
+# Document Ingestion & PDF Extraction
+pypdf>=4.0.0
+
+# LLM Providers & API Clients
+requests>=2.31.0
+
+# Environment Variable Management
+python-dotenv>=1.0.0

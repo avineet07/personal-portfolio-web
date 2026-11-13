@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <meta name="description"
+    content="{{ meta_description }}">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/src/assets/favicon.svg">
+  <link rel="alternate icon" href="/favicon.ico">
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="/templates/css/styles.css?v=20261110_4">
+
+  <!-- Inline styles to prevent white flash before CSS loads -->
+  <style>
+    html,
+    body {
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      color: #111827;
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+
+  <!-- Detail Reader Module -->
+  <script src="/templates/js/detail-reader.js?v=20261110_5"></script>
+  <script>
+    // Static host query parameter fallback (?page=work -> /work.html)
+    (function () {
+      var p = new URLSearchParams(window.location.search).get('page');
+      var path = window.location.pathname;
+      if (p === 'work' && !path.includes('work')) {
+        window.location.replace('/work.html' + window.location.search);
+      } else if (p === 'projects' && !path.includes('projects')) {
+        window.location.replace('/projects.html' + window.location.search);
+      } else if (p === 'home' && (path.includes('work') || path.includes('projects'))) {
+        window.location.replace('/' + window.location.search);
+      }
+    })();
+
+    window.WORK_DATA = {{ (all_work_cases or []) | tojson }};
+    window.BLOG_DATA = {{ (all_blogs or []) | tojson }};
+
+    // Singleton getter to guarantee detail reader access across templates
+    function getDetailReader() {
+      if (!window.detailReader && typeof DetailReader !== 'undefined') {
+        window.detailReader = new DetailReader({
+          workData: window.WORK_DATA || [],
+          blogs: window.BLOG_DATA || []
+        });
+      }
+      return window.detailReader;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      getDetailReader();
+    });
+  </script>
+</head>
+
+<body>
+  <!-- Navigation Header Toolbar -->
+  <header class="navbar-header">
+    <div class="navbar-wrapper">
+      <div class="navbar-brand">
+        <a href="/" id="brand-link">Personal Portfolio</a>
+      </div>
+      <nav id="navbar-root" class="navbar-nav">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a href="/" class="nav-link {% if state_view == 'home' %}active{% endif %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="/work.html" class="nav-link {% if state_view == 'work' %}active{% endif %}">Work</a>
+          </li>
+          <li class="nav-item">
+            <a href="/projects.html" class="nav-link {% if state_view == 'projects' %}active{% endif %}">Projects</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Single Column Content Area (no sidebar) -->
+  <main id="main-root" class="content-column">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Modal overlay container for reading articles -->
+  <div id="modal-root">
+    {% if active_blog %}
+            <div class="detail-reader-overlay active" role="dialog" aria-modal="true">
+              <div class="detail-reader-wrapper" id="server-modal-wrapper">
+                <div class="detail-reader-toolbar">
+                  <button class="dr-zoom-btn server-zoom-out" title="Zoom out (-)" aria-label="Zoom out">−</button>
+                  <span class="dr-zoom-label server-zoom-label">100%</span>
+                  <button class="dr-zoom-btn server-zoom-in" title="Zoom in (+)" aria-label="Zoom in">+</button>
+                  <button class="dr-zoom-btn server-zoom-fit" title="Reset zoom (0)"
+                    aria-label="Reset zoom">Reset</button>
+                  <button class="dr-zoom-btn dr-fullscreen-btn server-fullscreen-btn" title="Toggle full screen (F)"
+                    aria-label="Toggle full screen">⤢ Fullscreen</button>
+                  <a href="?page={{ state_view or 'projects' }}" class="detail-reader-close" title="Close (Escape)"
+                    aria-label="Close">&times;</a>
+                </div>
+                <div class="detail-reader-scroll" id="server-modal-scroll">
+                  <div class="detail-reader-content" id="server-modal-content">
+                    <h1 class="dr-title">{{ active_blog.title }}</h1>
+                    <div class="dr-subtitle" style="margin-bottom:1rem;">
+                      <span class="dr-category-badge" style="margin-right:0.6rem;margin-bottom:0;">{{ active_blog.topic
+                        }}</span>
+                      {{ active_blog.date }} &bull; {{ active_blog.readTime }}
+                    </div>
+                    <div class="dr-tags">
+                      {% for tag in active_blog.tags %}
+                      <span class="dr-tag">#{{ tag }}</span>
+                      {% endfor %}
+                    </div>
+                    <div class="dr-article">
+                      {{ active_blog.content | safe }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <script>
+        // Wire zoom & fullscreen for server-rendered modal view
+        document.addEventListener('DOMContentLoaded', function () {
+          var wrapper = document.getElementById('server-modal-wrapper');
+          var content = document.getElementById('server-modal-content');
+          var label = document.querySelector('.server-zoom-label');
+          var fsBtn = document.querySelector('.server-fullscreen-btn');
+          var zoomLevel = 100;
+          var isFs = false;
+
+          function applyZoom() {
+            if (content) {
+              content.style.transform = 'scale(' + (zoomLevel / 100) + ')';
+              content.style.transformOrigin = 'top center';
+            }
+            if (label) label.textContent = zoomLevel + '%';
+          }
+
+          var outBtn = document.querySelector('.server-zoom-out');
+          if (outBtn) outBtn.addEventListener('click', function () {
+            zoomLevel = Math.max(50, zoomLevel - 10);
+            applyZoom();
+          });
+
+          var inBtn = document.querySelector('.server-zoom-in');
+          if (inBtn) inBtn.addEventListener('click', function () {
+            zoomLevel = Math.min(200, zoomLevel + 10);
+            applyZoom();
+          });
+
+          var fitBtn = document.querySelector('.server-zoom-fit');
+          if (fitBtn) fitBtn.addEventListener('click', function () {
+            zoomLevel = 100;
+            applyZoom();
+          });
+
+          function toggleFullscreen() {
+            isFs = !isFs;
+            wrapper.classList.toggle('is-fullscreen', isFs);
+            if (fsBtn) {
+              fsBtn.innerHTML = isFs ? '⤡ Restore' : '⤢ Fullscreen';
+              fsBtn.title = isFs ? 'Restore window size (F)' : 'Toggle full screen (F)';
+            }
+          }
+
+          if (fsBtn) fsBtn.addEventListener('click', toggleFullscreen);
+
+          document.addEventListener('keydown', function (e) {
+            if (!wrapper) return;
+            if (e.key === 'Escape') {
+              window.location.href = '?page={{ state_view or "projects" }}';
+            } else if (e.key === '+' || e.key === '=') {
+              zoomLevel = Math.min(200, zoomLevel + 10);
+              applyZoom();
+            } else if (e.key === '-' || e.key === '_') {
+              zoomLevel = Math.max(50, zoomLevel - 10);
+              applyZoom();
+            } else if (e.key === '0') {
+              zoomLevel = 100;
+              applyZoom();
+            } else if (e.key === 'f' || e.key === 'F') {
+              toggleFullscreen();
+            }
+          });
+        });
+            </script>
+            {% endif %}
+          </div>
+
+          <!-- Lightbox for images/videos -->
+          <div id="lightbox-root" class="lightbox-overlay">
+            <button class="lightbox-close">&times;</button>
+            <div class="lightbox-content" id="lightbox-content"></div>
+          </div>
+
+          <script>
+        // Lightbox: click images in blog modal to expand, click again or backdrop to close
+        document.addEventListener('DOMContentLoaded', function () {
+          var overlay = document.getElementById('lightbox-root');
+          var content = document.getElementById('lightbox-content');
+          var closeBtn = document.querySelector('.lightbox-close');
+
+          function openLightbox(src, type) {
+            if (type === 'video') {
+              content.innerHTML = '<video controls autoplay style="max-width:100%;max-height:80vh;border-radius:8px;"><source src="' + src + '">Your browser does not support video.</video>';
+            } else {
+              content.innerHTML = '<img src="' + src + '" alt="Expanded view" style="max-width:100%;max-height:80vh;border-radius:8px;display:block;margin:0 auto;" />';
+            }
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          }
+
+          function closeLightbox() {
+            overlay.classList.remove('active');
+            content.innerHTML = '';
+            document.body.style.overflow = '';
+          }
+
+          // Close on button click
+          closeBtn.addEventListener('click', closeLightbox);
+
+          // Close on backdrop click
+          overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) closeLightbox();
+          });
+
+          // Close on Escape key
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeLightbox();
+          });
+
+          // Delegate clicks on images inside the blog article body
+          var articleBody = document.querySelector('.article-body');
+          if (articleBody) {
+            articleBody.addEventListener('click', function (e) {
+              var img = e.target.closest('img[lightbox]');
+              if (img) {
+                e.preventDefault();
+                e.stopPropagation();
+                openLightbox(img.src, 'image');
+              }
+              var link = e.target.closest('a.video-link');
+              if (link) {
+                e.preventDefault();
+                e.stopPropagation();
+                openLightbox(link.href, 'video');
+              }
+            });
+          }
+        });
+          </script>
+</body>
+
+</html>
