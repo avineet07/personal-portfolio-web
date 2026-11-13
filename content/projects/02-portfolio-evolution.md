@@ -50,8 +50,8 @@ The platform combines automated content generation with high-performance present
 └────────────────────────────────────────────────────────────────────────────────────────┘
 
   [ PDF Documents ]
-   ├── ref/resume/CV_AshishVineet.pdf
-   └── ref/cover_letter/Cover_Letter.pdf
+   ├── ref/resume/resume.pdf
+   └── ref/cover_letter/cover_letter.pdf
             │
             ▼
   [ Extraction & Synthesis Pipeline (src/pipeline/) ]

@@ -12,7 +12,9 @@ permissions:
 jobs:
   test-build-and-deploy:
     name: Test, Build & Deploy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    env:
+      ACTIONS_RUNNER_FORCED_NODE24_WARNING: "false"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4

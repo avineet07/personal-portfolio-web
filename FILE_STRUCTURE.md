@@ -25,9 +25,9 @@ personal-website-portfolio/
 │
 ├── ref/                               # Ingestion reference directory for resumes and cover letters
 │   ├── resume/                        # PDF resume drop folder
-│   │   └── CV_AshishVineet.pdf
+│   │   └── resume.pdf
 │   └── cover_letter/                  # PDF cover letter drop folder
-│       └── Ashish Vineet Cover Letter.pdf
+│       └── cover_letter.pdf
 │
 ├── scripts/                           # Developer automation and deployment utilities
 │   ├── build.py                       # Static site pre-renderer for Cloudflare Pages (`dist/`)

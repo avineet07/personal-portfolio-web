@@ -1,6 +1,6 @@
 # Personal Portfolio & Data Science Showcase (Python Flask SSR)
 
-Welcome to the source code repository for **Ashish Vineet's** personal portfolio and engineering case study website. This project is built using a modern, minimalist **Python Flask** stack with server-side rendering (SSR) via **Jinja2** templates, paired with vanilla CSS and lightweight JavaScript primitives. It completely eliminates client-side framework bloat while providing an app-like reader experience.
+Welcome to the source code repository for this personal portfolio and engineering case study website. This project is built using a modern, minimalist **Python Flask** stack with server-side rendering (SSR) via **Jinja2** templates, paired with vanilla CSS and lightweight JavaScript primitives. It completely eliminates client-side framework bloat while providing an app-like reader experience.
 
 The application has **zero heavy framework dependencies**, loads instantaneously, is optimized for SEO and accessibility, and features an interactive modal reader with bidirectional card linking, history navigation, and instant client-side sorting.
 
@@ -43,8 +43,8 @@ personal-website-portfolio/
 │   │   ├── churn-model-pipeline.svg
 │   │   ├── data-mesh-arch.svg
 │   │   ├── snowflake-cdc-flow.svg
-│   │   ├── Ashish_Vineet_Cover_Letter.pdf
-│   │   └── CV_AshishVineet.pdf
+│   │   ├── cover_letter.pdf
+│   │   └── resume.pdf
 │   ├── content.py             # Content pipeline: dynamic parser, caching, indexing, cross-linking
 │   ├── css/
 │   │   └── styles.css         # Design tokens, unified card styles, reader modal, themes
@@ -66,6 +66,36 @@ personal-website-portfolio/
 │   └── test_app.py            # Unit test suite (routing, loaders, indexing, cross-linking)
 └── uv.lock                    # Cryptographic dependency lockfile
 ```
+
+---
+
+## ⚡ HOWTO: Accelerated Portfolio Generation
+
+This codebase is designed to create, preview, and deploy a production-grade portfolio in minutes.
+
+### 1. Core Command Suite
+| Task | Command | Description |
+| :--- | :--- | :--- |
+| **Install** | `uv sync` *(or `pip install -r requirements.txt`)* | Synchronize dependencies into `.venv` |
+| **Dev Server** | `uv run app.py` *(or `python app.py`)* | Start live SSR dev server on `http://localhost:5000` |
+| **Test** | `python3 -m unittest discover tests` | Run validation suite (28 tests, zero warnings) |
+| **Static Build**| `python3 scripts/build.py` | Pre-render dynamic templates into `dist/` |
+| **Deploy** | `bash scripts/deploy.sh` | Execute Gates 1-3 (Test -> Build -> Deploy to Cloudflare Pages & R2) |
+
+### 2. Fast-Track 3-Step Generation Flow
+1. **Populate Identity & Experience**:
+   - *Automated*: Drop your PDF into `ref/resume/` and run `python scripts/run_pipeline.py` to auto-extract structured data.
+   - *Direct*: Edit [src/data/portfolio_data.json](file:///Users/ashish/Documents/playground/personal-website-portfolio/src/data/portfolio_data.json) directly. Updates reflect instantly on browser refresh.
+2. **Scaffold Case Studies & Projects**:
+   - Scaffold structured Markdown drafts with the CLI:
+     ```bash
+     python scripts/manage_content.py new work "High-Scale Data Platform"
+     python scripts/manage_content.py new project "Autonomous Agent System"
+     ```
+   - Customize metrics and architectural details in `content/work/*.md` and `content/projects/*.md`.
+3. **Ship to Production**:
+   - Deploy directly from your machine: `bash scripts/deploy.sh`
+   - Or push to GitHub for automated CI/CD: `git push origin main`
 
 ---
 
@@ -150,12 +180,8 @@ Add related slug IDs to the YAML frontmatter in any Markdown file:
 
 ```yaml
 ---
-id: sears-agentic-workflow
-title: "Enterprise Agentic Workflow Automation & HITL Infrastructure"
-company: "Sears Holdings"
-role: "Senior Technical Associate"
-period: "May 2024 – Oct 2026"
-category: "Agentic AI & LLMs"
+id: agentic-workflow
+...
 summary: "Production cyclic agent graphs built with LangGraph..."
 metrics:
   - "45% reduction in manual triage time"

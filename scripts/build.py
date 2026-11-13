@@ -50,7 +50,7 @@ def inject_global_content():
         'all_work_cases': load_work_cases(),
         'all_blogs': load_blogs(),
         'content_index': get_content_index(),
-        'title': resume_data.get('title', 'Ashish Vineet | Data Science & Engineering Portfolio'),
+        'title': resume_data.get('title', 'Portfolio & Engineering Case Studies'),
         'meta_description': resume_data.get('meta_description', 'Portfolio and case studies.'),
     }
 

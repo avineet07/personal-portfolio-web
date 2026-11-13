@@ -8,7 +8,7 @@ and compiles a clean static JSON (src/data/portfolio_data.json) to drive HTML te
 
 Usage:
   python scripts/run_pipeline.py
-  python scripts/run_pipeline.py --resume ref/resume/CV_AshishVineet.pdf --cover-letter ref/cover_letter/Ashish\ Vineet\ Cover\ Letter.pdf
+  python scripts/run_pipeline.py --resume ref/resume/resume.pdf --cover-letter ref/cover_letter/cover_letter.pdf
   python scripts/run_pipeline.py --use-llm --provider gemini --scaffold-articles
   python scripts/run_pipeline.py --historical
 """

@@ -1,7 +1,6 @@
-# Grounding documents: ignore raw files/zips, but track resume & cover letter folders
-ref/*
-!ref/resume/
-!ref/cover_letter/
+# Exclude all PDFs (keep resumes and personal documents off GitHub)
+*.pdf
+ref/
 
 # Aider and tooling artifacts
 .aider*

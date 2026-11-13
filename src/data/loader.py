@@ -107,8 +107,8 @@ def load_portfolio_json() -> Tuple[Dict[str, Any], Dict[str, Any]]:
                 if "internships" not in resume:
                     resume["internships"] = data.get("internships", [])
                 if "title" not in resume:
-                    candidate_name = profile.get("name") or data.get("name", "Ashish Vineet")
-                    resume["title"] = data.get("title", f"{candidate_name} | Data Science & Engineering Portfolio")
+                    candidate_name = profile.get("name") or data.get("name", "Engineering Professional")
+                    resume["title"] = data.get("title", f"{candidate_name} | Portfolio & Case Studies")
                 if "meta_description" not in resume:
                     resume["meta_description"] = data.get("meta_description", "")
 

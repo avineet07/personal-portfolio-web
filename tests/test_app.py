@@ -26,11 +26,12 @@ class TestPortfolioApp(unittest.TestCase):
         response = self.client.get('/favicon.ico')
         self.assertEqual(response.status_code, 200)
         self.assertIn(response.mimetype, ['image/x-icon', 'image/vnd.microsoft.icon', 'image/svg+xml'])
+        response.close()
 
     def test_home_page_status_200(self):
         response = self.client.get('/?page=home')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Ashish Vineet", response.data)
+        self.assertIn(b"home-hero-title", response.data)
         # Verify visual cards rendered
         self.assertIn(b"Core Architectural Pillars", response.data)
         self.assertIn(b"Featured Work", response.data)
@@ -137,10 +138,12 @@ class TestPortfolioApp(unittest.TestCase):
         css_res = self.client.get('/templates/css/styles.css')
         self.assertEqual(css_res.status_code, 200)
         self.assertIn(b"plus jakarta sans", css_res.data.lower())
+        css_res.close()
 
         js_res = self.client.get('/templates/js/detail-reader.js')
         self.assertEqual(js_res.status_code, 200)
         self.assertIn(b"DetailReader", js_res.data)
+        js_res.close()
 
 
 if __name__ == "__main__":

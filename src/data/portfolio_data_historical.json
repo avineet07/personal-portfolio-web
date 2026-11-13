@@ -1,12 +1,12 @@
 {
   "version": "1.0",
   "profile": {
-    "name": "Ashish Vineet",
+    "name": "Engineering Professional",
     "headline": "AI/ML, Data Science, Data Engineering & Analytics Professional",
-    "linkedin": "linkedin.com/in/ashish-vineet",
-    "github": "github.com/ashishvineet",
-    "email": "ashishvineet07@gmail.com",
-    "location": "Mumbai, India",
+    "linkedin": "linkedin.com/in/example",
+    "github": "github.com/example",
+    "email": "contact@example.com",
+    "location": "Global",
     "skills": {
       "languages": [
         "Python",
@@ -169,8 +169,8 @@
         "field": "Metallurgical and Materials Engineering"
       }
     ],
-    "title": "Ashish Vineet | Data Scientist & Data Product Portfolio",
-    "meta_description": "Portfolio of Ashish Vineet, a Data Scientist and Data Product Manager with 5+ years of experience in ML, AI, Data Engineering, and Advanced Analytics."
+    "title": "Portfolio & Engineering Case Studies",
+    "meta_description": "Portfolio of an Engineering and Data Professional with experience in ML, AI, Data Engineering, and Advanced Analytics."
   },
   "content_meta": {
     "matched_work_count": 3,
@@ -178,7 +178,7 @@
   },
   "generated_at": "2026-11-11T20:57:53.298194+00:00",
   "source_documents": {
-    "resume": "CV_AshishVineet.pdf",
-    "cover_letter": "Ashish Vineet Cover Letter.pdf"
+    "resume": "resume.pdf",
+    "cover_letter": "cover_letter.pdf"
   }
 }
