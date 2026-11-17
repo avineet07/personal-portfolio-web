@@ -61,6 +61,23 @@ class TestMarkdownPipeline(unittest.TestCase):
         self.assertIn("<strong>V1</strong>", html)
         self.assertIn("<td>Modular</td>", html)
 
+    def test_table_with_empty_cells_and_breaks(self):
+        """Tables with blank first cells, <br> tags, and multiple rows stay in one table."""
+        md = (
+            "Intro paragraph:\n"
+            "| Team | Role | Responsibilities |\n"
+            "| :--- | :--- | :--- |\n"
+            "| **Core** | **Dev** | Backend APIs<br>- Tests |\n"
+            "| | **Data** | Pipelines<br>- Audits |\n"
+            "| **Ops** | **SRE** | Deployments |\n"
+            "Outro paragraph."
+        )
+        html = md_to_html(md)
+        self.assertEqual(html.count("<table class=\"markdown-table\">"), 1)
+        self.assertIn("<td>Backend APIs<br>- Tests</td>", html)
+        self.assertIn("<td>Pipelines<br>- Audits</td>", html)
+        self.assertIn("<td>Deployments</td>", html)
+
     def test_inline_code_preserves_special_characters(self):
         """Asterisks inside inline code spans are not corrupted into italics."""
         md = "Use `*.<DOMAIN>.com` pattern for wildcard routing."

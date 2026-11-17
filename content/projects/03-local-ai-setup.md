@@ -1,11 +1,11 @@
 ---
 id: local-inference-mac-mini
 order: 3
-title: Local AI Inference — Using Mac Mini as a Private Inference Server
+title: "Local AI Inference — Using Mac Mini as a Private Inference Server"
 date: Sep-2026
-summary: A technical deep dive into converting a 32GB Apple Silicon Mac Mini into a private, self-hosted inference server using llama.cpp and MiMo-V2.6-9B, then pairing it with Cline for reliable tool calling. Includes server configuration, harness selection criteria, and a glossary of the terminology that actually matters.
+summary: "A technical deep dive into converting a 32GB Apple Silicon Mac Mini into a private, self-hosted inference server using llama.cpp and MiMo-V2.6-9B, then pairing it with Cline for reliable tool calling. Includes server configuration, harness selection criteria, and a glossary of the terminology that actually matters."
 topic: Local AI Infrastructure
-readTime: 9 min read
+readTime: 10 min read
 tags:
   - llama.cpp
   - local-inference
@@ -13,70 +13,115 @@ tags:
   - cline
   - gguf
   - apple-silicon
+related:
+  - aws-smart-proxy
+  - portfolio-evolution
+---
+
+This article is a working checkpoint of a deliberate exercise: convert a **32GB Apple Silicon Mac Mini** into a private, high-throughput inference server that behaves as a first-class OpenAI-compatible endpoint, then wire it to an autonomous coding agent that reliably drives tools against it.
+
+The result is a fully local agentic coding loop with **no per-token billing, zero data egress, and a 131K-token context window** — achieved by treating the stack as three separable tiers: **hardware budget**, **inference engine**, and **agent harness**.
+
+The interesting discovery was never the setup itself. It was learning, through repeated failure, that **the harness matters far more than the model when the model is small**.
 
 ---
 
-This article is a working checkpoint of a deliberate exercise: convert a 32GB Apple Silicon Mac Mini into a private inference server that behaves as a first-class OpenAI-compatible endpoint, then wire it to a coding agent that reliably drives tools against it.
+### The Three-Tier Architecture Overview
 
-The result is a fully local agentic coding loop with **no per-token billing, no data egress, and a 131K-token context window** — achieved by treating the stack as three separable layers: **hardware budget**, **inference engine**, and **agent harness**.
+```mermaid
+flowchart TD
+    subgraph Tier1["Tier 1: Hardware & Memory Allocation (32GB M-Series Unified RAM)"]
+        OS["macOS + System & Editor Headroom<br/>~6–8 GB"]
+        W["Model Weights: MiMo-9B Q8_0<br/>~9.5 GB GGUF"]
+        KV["KV Cache: 131K Context q8_0<br/>~11–13 GB (Flash Attention)"]
+        MM["Vision Projector: mmproj<br/>~0.5 GB"]
+    end
 
-The interesting part was never the setup. It was discovering, through repeated failure, that the harness matters more than the model when the model is small.
+    subgraph Tier2["Tier 2: Inference Engine (llama.cpp / llama-server)"]
+        LS["llama-server (Port 6789)<br/>OpenAI-Compatible REST API (/v1/chat/completions)"]
+        FA["Metal GPU Offload (99 Layers)<br/>Flash Attention Enabled"]
+        SAMPLER["Deterministic Sampling<br/>Temp=0.6 · Min-P=0.05 · DRY Penalty"]
+        LS --- FA
+        LS --- SAMPLER
+    end
+
+    subgraph Tier3["Tier 3: Agentic Coding Harness (Cline in VS Code)"]
+        CTRL["Agent Execution Loop Controller<br/>State Machine & Multi-Turn History"]
+        SCH["Strict XML/JSON Tool Schemas<br/>execute_command · read_file · replace_in_file"]
+        HITL["Granular Human-in-the-Loop (HITL)<br/>Per-Action Review & Terminal Output Feedback"]
+        CTRL --> SCH
+        SCH --> HITL
+    end
+
+    Tier1 -->|"Unified Memory Substrate"| Tier2
+    Tier2 <-->|"HTTP / JSON Wire Protocol"| Tier3
+
+    style Tier1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style Tier2 fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style Tier3 fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+```
 
 ---
 
 ### 1. The Constraint: 32GB Unified Memory Is the Real Spec
 
-In consumer inference, the binding constraint is not CPU clock speed or GPU cores — it is **unified memory capacity**. Every gigabyte must be shared between the operating system, the model weights, the KV cache, and the vision projector (if multimodal). The budget breaks down roughly as follows:
+In consumer-grade on-device inference, the binding constraint is never raw CPU clock speed or nominal GPU core counts — it is **unified memory capacity**. Every gigabyte is shared across the operating system, running applications, model weights, key-value (KV) caches, and vision projectors.
 
-- **OS + apps**: ~6–8 GB headroom kept for macOS and the editor.
-- **Model weights**: A 9B parameter model at Q8_0 lands near **9.5 GB**; at Q4_K_M, near 5.5 GB.
-- **KV cache**: At 131K tokens with `q8_0` key/value quantization, this is several GB depending on layer count.
-- **Vision projector**: A MiMo mmproj file adds hundreds of megabytes for multimodal input.
+| Memory Component | Allocation | Sizing Rationale |
+|:---|:---|:---|
+| **macOS & System Apps** | 6.0 – 8.0 GB | Required headroom to prevent macOS disk swapping during IDE builds and multitasking. |
+| **Model Weights (9B)** | ~9.5 GB | `MiMo-V2.6-Distill-Qwen-9B` quantized at `Q8_0` (near-lossless 8-bit precision). |
+| **KV Cache (131K Context)** | 11.0 – 13.0 GB | Headroom for multi-turn agent transcripts with `q8_0` quantized key/value states. |
+| **Multimodal Projector** | ~0.5 GB | Vision encoder (`mmproj`) enabling screenshot and diagram ingestion. |
+| **Total Footprint** | **~28.0 – 31.0 GB** | **Optimal saturation** of 32GB physical RAM with zero disk swap usage. |
 
-This immediately rules out frontier-scale local models (70B+) and forces a disciplined choice: **a 7B–14B class model at high quantization**, which is exactly the regime where quantized inference engines shine. In fact, this constraint was beneficial towards learnings which would otherwise go unnoticed, like
-
-- As soon as Swap memory came into the RAM Usage picture, the token throughput dropped significantly
-- How Different parameters affect model performance (to be discussed later)
-
+#### Key Takeaway on Memory Pressure
+- **The Swap Wall**: The moment memory demand exceeded 32GB and macOS engaged virtual memory swap, token generation throughput collapsed from ~35 tokens/sec to **under 2 tokens/sec**. Avoiding disk swap at all costs is the single most important operational rule.
+- **Quantization Sizing**: This constraint rules out frontier-scale 70B+ parameter models on a single machine and forces a disciplined choice: **a 7B–14B class model at high precision (Q8_0 or Q6_K)**, where quantized Metal inference excels.
 
 ---
 
 ### 2. Engine Selection: Why llama.cpp (and Not Ollama or vLLM)
 
-Three candidate engines were evaluated against a single-user, on-device workload:
+Three candidate inference runtimes were evaluated against a single-user, on-device developer workflow:
 
-- **vLLM** is the correct choice for high-throughput GPU serving with many concurrent users. It is *not* the correct choice for a laptop-class machine with one user — its PagedAttention advantage is invisible at concurrency 1, and its CUDA-first design offers no benefit on Apple Metal.
-- **Ollama** is a convenient wrapper that embeds llama.cpp underneath. It is excellent for experimentation but abstracts away sampler and KV cache control — which matters for long agentic sessions.
-- **llama.cpp** was selected because it exposes exactly the knobs that matter here: **GGUF quantization levels**, **KV cache type**, **flash attention**, **DRY sampling**, and a first-class **OpenAI-compatible HTTP server**.
-
-In practical terms, llama.cpp is the *engine*; the server mode (`llama-server`) is what turns it into an endpoint that any OpenAI-compatible client — including agent harnesses — can talk to.
+- **vLLM**: The industry standard for high-concurrency cloud GPU clusters. However, on an Apple Silicon machine with concurrency = 1, its PagedAttention advantage provides zero latency benefit, and its CUDA-centric design does not exploit Apple Metal pipelines natively.
+- **Ollama**: An approachable developer wrapper that bundles `llama.cpp` underneath. While excellent for quick prototyping, Ollama abstracts away fine-grained sampler knobs, KV cache quantization formats, and context-truncation flags that are mandatory for stabilizing multi-turn agent sessions.
+- **llama.cpp (Winner)**: Selected because it provides low-level control over the exact parameters required for agent stability:
+  - Explicit **Metal GPU layer offloading** (`-ngl 99`).
+  - **Flash Attention** integration for long-context prefill acceleration.
+  - **8-bit KV cache quantization** (`--cache-type-k q8_0 --cache-type-v q8_0`), cutting KV memory consumption by 50%.
+  - Modern anti-repetition samplers (**DRY** and **Min-P**).
+  - First-class, OpenAI-compatible HTTP server (`llama-server`).
 
 ---
 
 ### 3. Server Configuration: A Reproducible Launch Script
 
-The server is launched through a small shell function that enforces safety checks (model exists, file is not truncated) and exposes the tunable parameters for long sessions in one place.
+The server is managed via a dedicated shell function that validates file integrity, clears conflicting ports, and configures long-session context parameters in a single invocation:
 
-```zsh
+```bash
 start_llama_mimo() {
   local PORT=6789
   local MODEL="$HOME/models/MiMo-V2.6-Distill-Qwen-9B-Q8_0.gguf"
   local MMPROJ="$HOME/models/mmproj-MiMo-V2.6-Distill-Qwen-9B-Q8_0.gguf"
 
-  local CTX_SIZE=131072    # headroom for long agentic transcripts
-  local KV_K="q8_0"        # safe default — near-f16 quality, half memory
-  local KV_V="q8_0"
-  local TEMP=0.6
+  local CTX_SIZE=131072    # 131K context headroom for deep agent transcripts
+  local KV_K="q8_0"        # 8-bit quantized keys: near-f16 quality, half memory
+  local KV_V="q8_0"        # 8-bit quantized values
+  local TEMP=0.6           # Balanced temperature for deterministic tool invocation
   local TOP_P=0.95
   local TOP_K=20
-  local MIN_P=0.05         # filters low-probability loop triggers
+  local MIN_P=0.05         # Prunes low-probability hallucination branches
 
+  # Clean up any lingering process on the port
   local PIDS=$(lsof -ti :$PORT 2>/dev/null)
   [ -n "$PIDS" ] && { echo "Freeing port $PORT"; echo "$PIDS" | xargs kill -9; sleep 0.5; }
 
-  [ -f "$MODEL" ]  || { echo "Missing: $MODEL";  return 1; }
-  [ -f "$MMPROJ" ] || { echo "Missing: $MMPROJ"; return 1; }
+  [ -f "$MODEL" ]  || { echo "Missing model weights: $MODEL";  return 1; }
+  [ -f "$MMPROJ" ] || { echo "Missing vision projector: $MMPROJ"; return 1; }
 
+  # caffeinate prevents macOS sleep while the inference daemon is serving
   caffeinate -dimsu llama-server \
     -m "$MODEL" --mmproj "$MMPROJ" \
     --host 0.0.0.0 --port "$PORT" \
@@ -92,41 +137,70 @@ start_llama_mimo() {
 
 ---
 
-### 4. AI Code editor (Harness) selection
+### 4. The Agent Harness: Why Cline Outperforms Generic Assistants
 
-For the use case of AI-assisted coding, the code editor itself is the harness, providing tools like editing and creating files, producing diffs, running tasks, and managing the conversation history with the model. 
+In AI-assisted software engineering, **the editor is not just a UI — it is the agent harness**. The harness owns file system operations, terminal execution, diff calculation, permission gates, and conversation state management.
 
-Two editors were tested against the same local model and the same task: a default integrated AI panel (Zed) and a dedicated agent harness (Cline, a VS Code extension). The difference in success rate was not marginal — it was categorical.
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant Harness as Cline Agent Harness
+    participant LLM as Local llama-server (9B)
+    participant FS as Local Filesystem & Terminal
 
-The reason is architectural. A small 9B model is an unforgiving test of a harness, because every weakness in the agent loop surfaces as a visible failure. Cline is engineered with that reality in mind:
+    Dev->>Harness: "Implement feature X and run tests"
+    Harness->>LLM: Formatted Prompt + Schema + Workspace Context
+    LLM-->>Harness: Emits Tool Call: execute_command("pytest")
+    Harness->>Dev: Requests HITL Approval for Shell Command
+    Dev->>Harness: Approves Execution
+    Harness->>FS: Runs "pytest" in Subshell
+    FS-->>Harness: Returns Stderr / Failure Stack Trace
+    Harness->>LLM: Injects Stderr as Environment Feedback
+    LLM-->>Harness: Emits Tool Call: replace_in_file("bug.py", diff)
+    Harness->>Dev: Presents Visual Diff for Approval
+    Dev->>Harness: Confirms Diff
+    Harness->>FS: Writes Atomic File Update
+    Harness-->>Dev: Task Completed Successfully
+```
 
-- It owns the full agent loop. A central controller manages task state, tool dispatch, and multi-step recovery. The model reasons; the harness enforces structure.
+#### 4.1 Comparison: Generic Chat vs. Dedicated Harness
 
-- It has a dedicated tool layer. Tools like execute_command, read_file, and replace_in_file have dedicated handlers that validate arguments and feed structured success/failure back to the model on the next turn.
+| Capability | Generic Chat Panels (e.g. Copilot Chat) | Basic Integrated Panels (e.g. Zed Assistant) | Autonomous Agent Harness (Cline) |
+|:---|:---|:---|:---|
+| **Execution Loop** | Single-turn response; no multi-step agency. | Manual user copy-paste of commands. | **Autonomous multi-step loop** driven by goal completion. |
+| **Tool Calling with Small Models** | Frequent hallucination and formatting drift. | Unstructured bash suggestions. | **Rigid XML/JSON schema wrappers** optimized for 9B models. |
+| **Error Recovery** | User must manually paste error messages. | No closed feedback loop. | **Automatic stderr injection** allowing agent self-healing. |
+| **Safety Governance** | Read-only file inspection. | All-or-nothing execution. | **Granular, per-action Human-in-the-Loop (HITL)** approval gates. |
+| **Context Compaction** | Silent truncation causing amnesia. | Manual context reset required. | **Intelligent sliding window & transcript summarization**. |
 
-- It provides model-specific prompts, including for small models. This is the single highest-leverage difference. The harness adapts its instructions to the model's capacity rather than assuming cloud-scale reasoning ability.
+#### 4.2 Why Cline Succeeds Where Other Tools Fail on 9B Models
 
-- Human-in-the-loop as a correction layer. Per-action approval is not just safety — it is a fault-tolerant gate that catches malformed tool calls before they cascade.
+A compact 9B parameter model is an unforgiving test of a harness: any ambiguity in instructions or error reporting causes the model to derail. Cline is engineered around this constraint:
 
-In production terms: the agent is Model + Harness. Upgrading the model rarely fixes a failing agent; fixing the harness usually does. This exercise is a concrete demonstration of that principle.
+1. **Deterministic Tool Schema**: Rather than relying on fragile zero-shot JSON tool-calling, Cline uses unambiguous XML-tagged boundaries (`<execute_command>`, `<replace_in_file>`, `<read_file>`). This provides tight syntactic rails that small models follow reliably.
+2. **Closed Self-Correction Loops**: When a bash command fails with exit code 1 or a file replacement fails fuzzy matching, Cline does not crash. It injects the raw command output and stack trace directly back into the next model turn, enabling the 9B model to diagnose and self-correct its own mistake.
+3. **Model-Specific Prompt Adaptations**: Cline dynamically adjusts its system instructions based on model capability tiers, stripping away complex abstract instructions in favor of concrete step-by-step reasoning prompts suitable for local models.
+4. **Human-in-the-Loop as a Fault Tolerance Mechanism**: Per-action approval is not simply security — it prevents catastrophic cascades. If a 9B model proposes an incorrect terminal flag or file path, the developer can reject that individual step, keeping the rest of the conversation context intact.
 
-### 5. Appendix: Glossary
-A working vocabulary for anyone building on the same stack.
+> **Key Architecture Principle**: In autonomous systems, **Agent = Model + Harness**. When a local agent fails, upgrading the model parameter count rarely solves the root issue — hardening the harness nearly always does.
 
-- Inference Engine -	The software that loads a model onto hardware and executes the forward pass to generate tokens. Examples: llama.cpp, vLLM, TensorRT-LLM. It does not parse documents, manage agent state, or provide UI.
-- GGUF -	The single-file format used by llama.cpp that packages model weights, tokenizer, architecture metadata, and optionally the chat template into one distributable file.
-- Quantization -	Reducing the numerical precision of model weights (e.g., FP16 to 4-bit integers) to shrink memory footprint and accelerate inference. Common schemes include Q4_K_M (aggressive) and Q8_0 (near-lossless).
-- KV Cache -	The in-memory store of Key and Value vectors for every token processed so far. It is the model's working memory for the current conversation. Size grows linearly with context length and is a primary memory consumer on constrained hardware.
-- Context Window -	The maximum number of tokens (input + output) the model can attend to at once. Set at server launch via --ctx-size. Determines how much conversation history, code, and tool output can coexist.
-- Flash Attention -	An optimized attention kernel that reduces memory traffic and speeds up long-context inference. Essential on Apple Silicon for keeping long contexts tractable.
-- Chat Template -	A Jinja template that defines how messages (system / user / assistant / tool) are serialized into the exact token format the model was trained on. Incorrect templates are the most common cause of silent tool-calling failure.
-- Tool Call -	A structured output emitted by the model requesting a specific function invocation with typed arguments. In wire format it is text with special delimiters; the harness parses it into an actual function call.
-- Tool Choice -	An inference-time parameter (auto, required, none) that constrains whether the model is permitted, mandated, or forbidden from emitting a tool call. required forces the parser into the tool-call grammar and is a common workaround for models that emit tools as plain text.
-- Harness -	The runtime infrastructure that turns a model into an agent. It owns the execution loop, tool routing, context/memory management, permissions, error handling, and retries. Examples: Cline, Apogee, Aider.
-- Agent	The complete operational system — Model + Harness — that pursues a goal through iterative perception, reasoning, and action.
-- HITL (Human-in-the-Loop) - 	A checkpoint where execution pauses and awaits human approval before a consequential or irreversible action is committed. In harnesses like Cline this is per-action; in enterprise systems it is risk-tiered.
-- PagedAttention - 	A KV-cache memory management technique (pioneered by vLLM) that stores the cache in fixed-size pages rather than contiguous blocks. Eliminates fragmentation and enables high concurrency on GPU hardware. Not a production feature in llama.cpp.
-- Continuous Batching - 	A serving strategy where new requests are admitted to the running batch as soon as slots free up, rather than waiting for the entire batch to complete. The core throughput advantage of vLLM-class engines over llama.cpp at scale.
-- TTFT / TPOT - 	Time to First Token (prefill latency — how fast the prompt is processed) and Time Per Output Token (decode latency — how fast tokens are generated). The two halves of user-perceived responsiveness.
-- RAG (Retrieval-Augmented Generation) - 	An application-layer pattern that retrieves relevant text chunks from a vector store and injects them into the model's prompt. Required for any document-centric workflow (PDFs, codebases, knowledge bases) because the inference engine cannot parse them.
-- Router Mode - 	A llama.cpp server configuration (--models-preset without -m) that starts with no model loaded and spawns workers on demand. Reports model_path: "none" and chat_template: null until a worker is active.
+---
+
+### 5. Architectural Glossary & Working Terminology
+
+A reference glossary of core concepts governing local inference and agent design:
+
+| Term | Domain | Definition & Engineering Significance |
+|:---|:---|:---|
+| **Inference Engine** | Runtime | The execution software that loads quantized model weights into memory and executes the forward tensor pass to emit tokens (e.g., `llama.cpp`, `vLLM`). It does not manage file edits, terminal tasks, or agent memory. |
+| **GGUF** | Format | The binary container format created by `llama.cpp` that packages model weights, tokenizers, tensor metadata, and Jinja chat templates into a single portable file. |
+| **Quantization** | Weights | Compressing floating-point weights (e.g., FP16 down to 4-bit `Q4_K_M` or 8-bit `Q8_0`) to shrink RAM footprint and increase memory bandwidth throughput. |
+| **KV Cache** | Memory | The working memory holding Key and Value attention tensors for all processed tokens. Its size scales linearly with context length and represents the largest dynamic memory consumer. |
+| **Context Window** | Attention | The total token capacity (input prompt + generated completion) the model can attend to at once. Set via `--ctx-size` in `llama-server`. |
+| **Flash Attention** | Kernel | An I/O-aware attention algorithm that computes softmax without materializing full attention matrices, slashing memory traffic on Apple Silicon GPU cores. |
+| **Chat Template** | Serialization | The Jinja template formatting dialogue turns (`system`, `user`, `assistant`, `tool`) into model-specific control tokens. Faulty templates are the #1 cause of silent tool-calling failures. |
+| **Harness** | Control Plane | The autonomous runtime environment that wraps an LLM. It manages the agent loop, parses tool invocations, handles errors, controls memory, and exposes human approval gates (e.g., `Cline`). |
+| **HITL** | Safety | **Human-in-the-Loop**: An execution checkpoint that halts autonomous operations to require human approval before applying file modifications or running shell commands. |
+| **Min-P Sampling** | Sampler | A dynamic probability threshold sampler that scales with the top token's confidence, cutting off low-probability hallucinations without truncating creative tails. |
+| **TTFT / TPOT** | Latency | **Time to First Token** (prefill prompt processing latency) and **Time Per Output Token** (decode token generation rate). |

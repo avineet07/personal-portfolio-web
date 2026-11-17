@@ -18,9 +18,9 @@ personal-website-portfolio/
 │   │   └── 02-portfolio-evolution.md  # Architecture & features of this portfolio
 │   └── work/                          # Production enterprise work case studies
 │       ├── 01-sears-agentic-workflow.md
-│       ├── 02-onecard-data-mesh.md
-│       ├── 03-onecard-churn-engine.md
-│       ├── 04-sears-cdc-snowflake.md
+│       ├── 02-sears-cdc-snowflake.md
+│       ├── 03-onecard-data-mesh.md
+│       ├── 04-onecard-churn-engine.md
 │       └── 05-auronova-risk-analytics.md
 │
 ├── ref/                               # Ingestion reference directory for resumes and cover letters

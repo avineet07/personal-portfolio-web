@@ -50,6 +50,8 @@ _ALLOWED_TAGS = frozenset({
     'a', 'img',
     'figure', 'figcaption',
     'video', 'source',  # media support
+    'button',
+    'svg', 'rect', 'path',
 })
 
 # Per-tag allowed attributes — anything else is stripped
@@ -62,8 +64,12 @@ _ALLOWED_ATTRS = {
     'source':     {'src', 'type'},
     'code':       {'class'},  # language class from fenced blocks
     'pre':        {'class'},
-    'div':        {'class', 'id'},
+    'div':        {'class', 'id', 'data-lang'},
     'span':       {'class'},
+    'button':     {'type', 'class', 'title', 'aria-label'},
+    'svg':        {'class', 'width', 'height', 'viewbox', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin'},
+    'rect':       {'x', 'y', 'width', 'height', 'rx', 'ry'},
+    'path':       {'d'},
     'hr':         {'class'},
     'table':      {'class'},
     'th':         {'align', 'class'},
@@ -197,7 +203,7 @@ def _is_table_block(block):
     lines = [l.strip() for l in block.split("\n") if l.strip()]
     if len(lines) >= 2 and lines[0].startswith("|") and lines[0].endswith("|"):
         sep = lines[1].replace(" ", "").replace("-", "").replace("|", "").replace(":", "")
-        return sep == ""
+        return sep == "" and "-" in lines[1]
     return False
 
 
@@ -253,13 +259,56 @@ def md_to_html(md_text):
     if not md_text:
         return ""
 
+    # 0. Normalize any raw <pre><code...> blocks to markdown code fences
+    def _normalize_raw_pre(m):
+        lang = (m.group(1) or "").replace("language-", "").strip()
+        code = html.unescape(m.group(2)).strip()
+        return f"\n```{lang}\n{code}\n```\n"
+
+    md_text = re.sub(r'<pre><code(?:\s+class="([^"]*)")?>(.*?)</code></pre>', _normalize_raw_pre, md_text, flags=re.DOTALL)
+
     # 1. Protect fenced code blocks
     code_blocks = []
 
     def _save_code(match):
-        lang = match.group(1) or ""
-        code = html.escape(match.group(2))
-        code_blocks.append(f'<pre><code class="{lang}">{code}</code></pre>')
+        raw_lang = (match.group(1) or "").strip().lower()
+        code = match.group(2)
+        if raw_lang == "mermaid":
+            # Mermaid diagrams: render as div.mermaid so mermaid.js can initialize them.
+            # Do NOT HTML-escape — mermaid.js reads textContent and needs raw diagram source.
+            code_blocks.append(f'<div class="mermaid">{code.strip()}</div>')
+        else:
+            display_lang = raw_lang if raw_lang else "code"
+            # Normalize common languages for Prism syntax highlighting
+            prism_lang = raw_lang if raw_lang else "none"
+            if raw_lang in ("sh", "zsh", "shell"):
+                prism_lang = "bash"
+            elif raw_lang in ("conf", "systemd", "env"):
+                prism_lang = "ini"
+            elif raw_lang in ("js", "node"):
+                prism_lang = "javascript"
+
+            escaped_code = html.escape(code)
+            code_html = (
+                f'<div class="code-window" data-lang="{display_lang}">'
+                f'<div class="code-window-header">'
+                f'<div class="code-window-dots">'
+                f'<span class="code-dot code-dot-red"></span>'
+                f'<span class="code-dot code-dot-yellow"></span>'
+                f'<span class="code-dot code-dot-green"></span>'
+                f'</div>'
+                f'<span class="code-window-lang">{display_lang}</span>'
+                f'<button type="button" class="code-copy-btn" title="Copy code" aria-label="Copy code">'
+                f'<svg class="copy-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+                f'<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>'
+                f'<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>'
+                f'</svg>'
+                f'</button>'
+                f'</div>'
+                f'<pre><code class="language-{prism_lang}">{escaped_code}</code></pre>'
+                f'</div>'
+            )
+            code_blocks.append(code_html)
         return f'__CODE_BLOCK_{len(code_blocks) - 1}__'
 
     md_text = _RE_CODE_BLOCK.sub(_save_code, md_text)
@@ -274,8 +323,8 @@ def md_to_html(md_text):
     md_text = re.sub(r'^([-*_]{3,})\s*\n([^\n])', r'\1\n\n\2', md_text, flags=re.MULTILINE)
 
     # Ensure tables have blank lines around them
-    md_text = re.sub(r'([^\n])\n(\|.+\|\s*)\n(\|[-:| ]+\|\s*)', r'\1\n\n\2\n\3', md_text)
-    md_text = re.sub(r'(\|.+\|)\n([^\n|])', r'\1\n\n\2', md_text)
+    md_text = re.sub(r'([^\n|])\n+(\|.+\|\s*\n\|(?:\s*:?-+:?\s*\|)+\s*(?:\n|$))', r'\1\n\n\2', md_text)
+    md_text = re.sub(r'(\n\|.+\|\s*)\n+([^\n|])', r'\1\n\n\2', md_text)
 
     # 3. Process blocks
     blocks = md_text.split("\n\n")
@@ -381,12 +430,12 @@ def md_to_html(md_text):
 
     result = "\n\n".join(processed)
 
-    # 4. Restore code blocks
+    # 4. Sanitize HTML
+    result = _sanitize_html(result)
+
+    # 5. Restore code blocks
     for i, code_html in enumerate(code_blocks):
         result = result.replace(f'__CODE_BLOCK_{i}__', code_html)
-
-    # 5. Sanitize HTML
-    result = _sanitize_html(result)
 
     return result
 

@@ -26,9 +26,9 @@ personal-website-portfolio/
 │   │   └── snowflake-dms-cdc.md
 │   └── work/                  # Production engineering case studies (.md)
 │       ├── 01-sears-agentic-workflow.md
-│       ├── 02-onecard-data-mesh.md
-│       ├── 03-onecard-churn-engine.md
-│       ├── 04-sears-cdc-snowflake.md
+│       ├── 02-sears-cdc-snowflake.md
+│       ├── 03-onecard-data-mesh.md
+│       ├── 04-onecard-churn-engine.md
 │       └── 05-auronova-risk-analytics.md
 ├── manage_blogs.py            # Content developer CLI (scaffold, list, and compile)
 ├── pyproject.toml             # Project dependencies and packaging (uv)
@@ -192,7 +192,7 @@ techStack:
   - python
 related:
   - langgraph-agents        # Links to content/projects/langgraph-agents.md
-  - sears-cdc-snowflake     # Links to content/work/04-sears-cdc-snowflake.md
+  - sears-cdc-snowflake     # Links to content/work/02-sears-cdc-snowflake.md
 ---
 ```
 

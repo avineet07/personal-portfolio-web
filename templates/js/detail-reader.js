@@ -81,9 +81,16 @@
     // Close buttons
     this.overlay.querySelector('.detail-reader-close').addEventListener('click', function () { self.close(); });
 
-    // Close on backdrop click (light dismiss)
+    // Close on backdrop click (light dismiss) — only when clicking outside the body of content
+    var mouseDownOnBackdrop = false;
+    this.overlay.addEventListener('mousedown', function (e) {
+      mouseDownOnBackdrop = (e.target === self.overlay);
+    });
     this.overlay.addEventListener('click', function (e) {
-      if (e.target === self.overlay) self.close();
+      if (e.target === self.overlay && mouseDownOnBackdrop) {
+        self.close();
+      }
+      mouseDownOnBackdrop = false;
     });
 
     // Zoom buttons
@@ -261,7 +268,45 @@
 
     this.content.innerHTML = html;
     this._bindRelatedClicks();
+    this._initCodeAndDiagrams();
     this._show();
+  };
+
+  DetailReader.prototype._initCodeAndDiagrams = function () {
+    var self = this;
+
+    // Trigger Prism syntax highlighting for code blocks
+    function highlightCode() {
+      if (typeof Prism !== 'undefined') {
+        try {
+          Prism.highlightAllUnder(self.content);
+        } catch (e) {
+          console.warn('Prism highlight failed:', e);
+        }
+      } else {
+        setTimeout(highlightCode, 200);
+      }
+    }
+    highlightCode();
+
+    // Render Mermaid diagrams
+    var diagrams = this.content.querySelectorAll('.mermaid');
+    if (diagrams.length) {
+      function renderMermaid() {
+        if (typeof mermaid !== 'undefined') {
+          try {
+            mermaid.run({
+              nodes: self.content.querySelectorAll('.mermaid')
+            });
+          } catch (e) {
+            console.warn('Mermaid render failed:', e);
+          }
+        } else {
+          setTimeout(renderMermaid, 200);
+        }
+      }
+      renderMermaid();
+    }
   };
 
   DetailReader.prototype._renderRelatedSection = function (relatedItems) {

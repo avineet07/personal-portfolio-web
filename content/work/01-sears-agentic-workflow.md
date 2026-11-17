@@ -52,7 +52,8 @@ related:
   <li><strong>Specialized Worker Nodes:</strong> Independent micro-agents dedicated to narrow domains (e.g., Inventory Lookup, Price Match Policy, Order Modification).</li>
 </ul>
 
-<pre><code class="language-python"># Conditional router node implementation
+```python
+# Conditional router node implementation
 def router_edge(state: AgentState) -> str:
     intent = state.get("classified_intent")
     risk_level = state.get("risk_score", 0.0)
@@ -64,7 +65,7 @@ def router_edge(state: AgentState) -> str:
     elif intent == "pricing_adjustment":
         return "pricing_agent"
     return "general_support_agent"
-</code></pre>
+```
 
 <h3>3. Human-in-the-Loop (HITL) Breakpoints</h3>
 <p>For high-risk operations (e.g. refunds exceeding threshold limits or policy exceptions), the state machine triggers an interrupt breakpoint. The transaction state is frozen, an operator dashboard surfaces the context with proposed agent actions, and upon human review, the state machine resumes seamlessly.</p>

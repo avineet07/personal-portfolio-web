@@ -1,6 +1,6 @@
 ---
 id: onecard-churn-engine
-order: 3
+order: 4
 title: "Credit Card Churn & Dormancy Predictive Intelligence"
 company: "OneCard"
 role: "Data Scientist and Data Product Manager"
