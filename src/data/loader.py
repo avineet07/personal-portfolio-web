@@ -88,8 +88,10 @@ def load_portfolio_json() -> Tuple[Dict[str, Any], Dict[str, Any]]:
                         "github": data.get("github", ""),
                         "email": data.get("email", ""),
                         "location": data.get("location", ""),
-                        "skills": data.get("skills", {})
+                        "skills": data.get("skills", {}),
+                        "resume_url": data.get("resume_url", "/assets/resume.pdf")
                     }
+                profile["resume_url"] = profile.get("resume_url") or data.get("resume_url", "/assets/resume.pdf")
 
                 # Resolve resume fields
                 if "resume" in data and isinstance(data["resume"], dict):

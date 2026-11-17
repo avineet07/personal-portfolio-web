@@ -1,174 +1,243 @@
 {
-  "name": "Ashish Vineet",
-  "headline": "Data Scientist & Data Product Manager",
-  "introduction": "7+ years of experience across different domains of the data lifecycle; including AI, ML, Data Science, Data Engineering, and Advanced Analytics. Passionate about creating data products and data-driven decision making which has direct impact on top and bottom line of a business. Graduated from IIT Kharagpur in 2019.",
-  "location": "Mumbai, India",
-  "email": "ashishvineet07@gmail.com",
-  "linkedin": "www.linkedin.com/in/ashish-vineet",
-  "github": "www.github.com/avineet07",
-  "title": "Ashish Vineet | Data Science & Engineering Portfolio",
-  "meta_description": "Portfolio and case studies of Ashish Vineet, Data Scientist & Data Product Manager.",
-  "skills": {
-    "languages": [
-      "Python",
-      "Pandas",
-      "scikit-learn",
-      "PyTorch",
-      "PySpark",
-      "SQL",
-      "Git/Github",
-      "Docker"
-    ],
-    "mlAi": [
-      "Agentic AI Workflows",
-      "Langgraph",
-      "Evals",
-      "Local AI Inferencing",
-      "Classification and Regression Trees",
-      "LightGBM"
-    ],
-    "dataEngineering": [
-      "ETL/ELT Data Pipelines",
-      "Data Modeling",
-      "Data Warehousing",
-      "Snowflake",
-      "DBT",
-      "Relational DBs (PostgreSQL, MySQL, OrcaleDB)",
-      "NoSQL (MongoDB)",
-      "AWS (EC2, DMS, Sagemaker, Lambda)",
-      "GCP"
-    ],
-    "analyticsAndBusiness": [
-      "Data Product Management",
-      "Agile Roadmap Planning",
-      "Design of Experiments",
-      "A/B Testing",
-      "Hypothesis Testing",
-      "Data Visualization",
-      "KPIs and OKRs"
-    ]
+  "version": "1.0",
+  "generated_at": "2026-11-17T06:17:49.952804+00:00",
+  "source_documents": {
+    "resume": "CV_AshishVineet.pdf",
+    "cover_letter": "Ashish Vineet Cover Letter.pdf"
   },
-  "pillars": [
-    {
-      "tag": "AI/ML & AGENTIC SYSTEMS",
-      "title": "Agentic AI & LLM Systems in Production",
-      "description": [
-        "Architected cyclic state graphs with conditional routing and Human-in-the-Loop (HITL) checkpoints.",
-        "Engineered automated evaluation pipelines for workflow adherence, sentiment drift, and hallucination detection.",
-        "Integrated production LLM solutions boosting task completion rates and operational efficiency."
-      ]
-    },
-    {
-      "tag": "DATA-DRIVEN DECISION ARCHITECTURE",
-      "title": "Enterprise Data Mesh & Data Products",
-      "description": [
-        "Implemented domain-oriented decentralized data ownership across business functions.",
-        "Constructed standardized data marts and automated rule engines for self-serve analytics.",
-        "Delivered end-to-end data products combining ETL, low-latency APIs, and executive metric layers."
-      ]
-    },
-    {
-      "tag": "MACHINE LEARNING",
-      "title": "Predictive ML & Customer Retention",
-      "description": [
-        "Engineered high-volume transaction features and gradient-boosted tree classifiers for customer behavior modeling.",
-        "Designed targeted ML campaigns with causal inference and Design of Experiments (DoE) methodologies.",
-        "Translated algorithmic predictions into automated downstream triggers improving portfolio retention."
-      ]
-    },
-    {
-      "tag": "DATA PLATFORM ENGINEERING",
-      "title": "Data Pipelines & Warehousing Infrastructure",
-      "description": [
-        "Implemented event-driven Change Data Capture (CDC) streaming into cloud data warehouses.",
-        "Streamlined data pipelines utilizing micro-batch stages, auto-ingestion pipes, and stream tasks.",
-        "Optimized SQL query performance and data modeling to deliver substantial compute cost savings."
-      ]
-    }
-  ],
-  "workExperience": [
-    {
-      "role": "Senior Technical Associate",
-      "company": "Sears",
-      "location": "Hyderabad, India",
-      "period": "May 2024 – Oct 2026",
-      "category": "AI/ML & Data Engieering",
-      "summary": "Architecting a multi-agent workflow utilizing LangGraph to automate top-funnel of the business.",
-      "bullets": [
-        "Architecting a multi-agent Agentic AI system utilizing LangGraph to automate top-funnel of the business; engineered conditional",
-        "routing to process workflows of multiple intents and outcomes on a single platform. Currently transitioning from Proof-of-",
-        "Concept (PoC) to production, with eval validations andhuman-in-the-loop (HITL)breakpoints for real-time interventions.",
-        "Developed LLM-based solutions using Azure OpenAI (o3-mini) for real-time AI Voice Chatbot performance for evaluation",
-        "with sentimentanalysis, workflow adherence and hallucination detection. Improved accuracy rates by10% through",
-        "prompt engineering and few-shot learning.",
-        "Engineering refined downstream tables in Snowflake data warehouse using native featuresstages, pipes, tasks and streams.",
-        "Migrated orchestration and execution fromMatilliontool toAmazon DMS CDC→s3→Snowpipearchitecture.",
-        "Optimized query performance by2-3x through SQL optimization, indexing, clustering, partitioning, and UPSERT",
-        "operations. Contributed to migration of orchestration platforms of various SCD type data pipelines",
-        "CreatedETL pipelinesextracting unstructured data from MongoDB NoSQL databases with Python scripts"
-      ]
-    },
-    {
-      "role": "Data Scientist and Data Product Manager",
-      "company": "OneCard",
-      "location": "Pune, India",
-      "period": "Jan 2021 – May 2024",
-      "category": "AI/ML & Analytics",
-      "summary": "Developed a data-driven decision making platform for enterprise-scale analytics serving cross-functional teams, implementing.",
-      "bullets": [
-        "Developed a data-driven decision making platform for enterprise-scale analytics serving cross-functional teams, implementing",
-        "Data Mesharchitecture across the organization to drive internal adoption and external scaling",
-        "Designed and delivered end-to-end data products that combined ETL pipelines, APIs, business logic, and ML models, incre-",
-        "mentally boosting thefeature adoption rate by 30%and lifting revenue by increasing interest yield from17% to 19%",
-        "via optimized pricing strategies.",
-        "Built Machine Learning models using Python, achieving84% accuracyfor customer churn prediction and spend dormancy",
-        "forecasting using LightGBM tree-based model.",
-        "Feature engineering over high volume credit card transaction data to facilitate multiple model-based initiatives.",
-        "Created multiple supervised learning algorithms (Logistic Regression and Decision T rees) for credit risk modeling,",
-        "propensity modeling, customer segmentation, and predictive analytics",
-        "Marketing and Product Analytics",
-        "Implemented targeted marketing campaigns using ML insights achieving14% user re-engagement and retentionim-",
-        "provement in credit card portfolio, and improving iterations through A/B testing and Design of Experiments (DoE).",
-        "Designed Lifetime Value Analysis (L TV/CAC) and channel-wise costs performance reports to determine best marketing",
-        "Performedcohortwise funnel analysis, and behavioral segmentation improving customer onboarding,engagementrates,",
-        "retention KPIs and metrics. Portrayed trends on executive dashboards usingApache SupersetandGoogle Data Studio."
-      ]
-    },
-    {
-      "role": "Associate Consultant",
-      "company": "Auronova Consulting",
-      "location": "Mumbai, India",
-      "period": "Sep 2019 – Dec 2020",
-      "category": "AI/ML & Analytics",
-      "summary": "Process automation leveraging Python and SQL for end-to-end analyses, dashboards, and churn model development.",
-      "bullets": [
-        "Process automation leveraging Python and SQL for end-to-end analyses, dashboards, and churn model development",
-        "Developed real-time interactive dashboard for clients enabling end-to-end metrics tracking for multiple clients"
+  "profile": {
+    "name": "Ashish Vineet",
+    "headline": "Senior Technical Associate & AI Systems Architect",
+    "introduction": "7+ years of experience across different domains of the data lifecycle; including AI, ML, Data Science, Data Engineering, and Advanced Analytics. Passionate about creating data products and data-driven decision making which has direct top and bottom line impact. Graduated from IIT Kharagpur in 2019.",
+    "linkedin": "linkedin.com/in/ashish-vineet",
+    "github": "github.com/avineet07",
+    "email": "ashishvineet07@gmail.com",
+    "location": "Mumbai, India",
+    "skills": {
+      "languages": [
+        "Python pandas",
+        "scikit-learn",
+        "PyTorch",
+        "Langgraph",
+        "Langchain",
+        "transformers",
+        "pySpark",
+        "SQL"
+      ],
+      "mlAi": [
+        "transformers",
+        "pySpark",
+        "SQL"
+      ],
+      "dataEngineering": [
+        "ETL/ELT Pipelines",
+        "Data Modeling",
+        "Data Warehousing",
+        "Apache Airflow",
+        "Snowflake",
+        "DBT",
+        "SQL PostgreSQL",
+        "MySQL",
+        "Oracle",
+        "NoSQL",
+        "Cloud AWS",
+        "GCP"
+      ],
+      "analyticsAndBusiness": [
+        "A/B Testing",
+        "Hypothesis Testing",
+        "Tableau",
+        "Apache Superset",
+        "Google Data Studio",
+        "Excel",
+        "Data Products",
+        "Agile",
+        "Scrum",
+        "Data Strategy",
+        "KPIs and OKRs",
+        "Business Intelligence",
+        "Roadmap Planning"
       ]
     }
-  ],
-  "education": [
-    {
-      "degree": "Dual Degree (B.Tech + M.Tech)",
-      "institution": "Indian Institute of Technology, IIT Kharagpur",
-      "period": "Jul 2014 – Aug 2019",
-      "field": ""
-    }
-  ],
-  "internships": [
-    {
-      "role": "Intern",
-      "company": "Genpact",
-      "location": "Bengaluru",
-      "period": "May 2017 – Jul 2017",
-      "description": "Formative engineering and data analytics projects completed at Genpact."
-    },
-    {
-      "role": "Data Science Intern",
-      "company": "Fractal Analytics",
-      "location": "Mumbai",
-      "period": "May 2018 – Jul 2018",
-      "description": "Formative engineering and data analytics projects completed at Fractal Analytics."
-    }
-  ]
+  },
+  "resume": {
+    "introduction": "7+ years of experience across different domains of the data lifecycle; including AI, ML, Data Science, Data Engineering, and Advanced Analytics. Passionate about creating data products and data-driven decision making which has direct top and bottom line impact. Graduated from IIT Kharagpur in 2019.",
+    "headline": "Senior Technical Associate & AI Systems Architect",
+    "pillars": [
+      {
+        "tag": "AI/ML & AGENTIC SYSTEMS",
+        "title": "Agentic AI & LLM Systems in Production",
+        "description": [
+          "Architected cyclic state graphs with conditional routing and Human-in-the-Loop (HITL) checkpoints.",
+          "Engineered automated evaluation pipelines for workflow adherence, sentiment drift, and hallucination detection.",
+          "Integrated production LLM solutions boosting task completion rates and operational efficiency."
+        ]
+      },
+      {
+        "tag": "DATA-DRIVEN DECISION ARCHITECTURE",
+        "title": "Enterprise Data Mesh & Data Products",
+        "description": [
+          "Implemented domain-oriented decentralized data ownership across business functions.",
+          "Constructed standardized data marts and automated rule engines for self-serve analytics.",
+          "Delivered end-to-end data products combining ETL, low-latency APIs, and executive metric layers."
+        ]
+      },
+      {
+        "tag": "MACHINE LEARNING",
+        "title": "Predictive ML & Customer Retention",
+        "description": [
+          "Engineered high-volume transaction features and gradient-boosted tree classifiers for customer behavior modeling.",
+          "Designed targeted ML campaigns with causal inference and Design of Experiments (DoE) methodologies.",
+          "Translated algorithmic predictions into automated downstream triggers improving portfolio retention."
+        ]
+      },
+      {
+        "tag": "DATA PLATFORM ENGINEERING",
+        "title": "Data Pipelines & Warehousing Infrastructure",
+        "description": [
+          "Implemented event-driven Change Data Capture (CDC) streaming into cloud data warehouses.",
+          "Streamlined data pipelines utilizing micro-batch stages, auto-ingestion pipes, and stream tasks.",
+          "Optimized SQL query performance and data modeling to deliver substantial compute cost savings."
+        ]
+      }
+    ],
+    "workExperience": [
+      {
+        "role": "Senior Technical Associate",
+        "company": "Sears",
+        "location": "Remote, India",
+        "period": "May 2024 – Oct 2026",
+        "category": "AI/ML & Analytics",
+        "summary": "Architecting a multi-agent Agentic AI system utilizingLangGraphto automate top funnel of business; engineered conditional.",
+        "bullets": [
+          "Architecting a multi-agent Agentic AI system utilizingLangGraphto automate top funnel of business; engineered conditional",
+          "routing to process workflows of multiple intents and outcomes on a single platform. Currently transitioning from Proof-of-",
+          "Concept (PoC) to production, with eval validations andhuman-in-the-loop (HITL)breakpoints for real-time interventions.",
+          "Developed LLM-based solutions using Azure OpenAI (o3-mini) for real-time AI Voice Chatbot performance for evaluation",
+          "with sentimentanalysis, workflow adherence and hallucination detection. Improved accuracy rates by10% through",
+          "prompt engineering and few-shot learning.",
+          "Data Engineering and Analytics Engineering",
+          "Led migrationfrom legacy Matillion orchestration to CDC-driven ingestion using AI-assisted coding workflows (Devin,",
+          "Antigravity): Upstream was heavily refactored byTrue CDC(Amazon DMS→S3→Snowpipe) and incrementalwatermark",
+          "CDCfor batch/ snapshot processing using C-native Python libraries for PostgreSQL, MySQL and Oracle DBs as well as",
+          "semi-structured MongoDB, parallel processing, chunking on numbered indexes, and switching fromGZIP csv to Parquet.",
+          "Architected and productionizedSnowflake data pipelines, leveraging native features(stages, pipes, streams, tasks,",
+          "stored procedures)to build reliable and tested table outputs, supporting both SCD1 and SCD2 transformations.",
+          "Optimized query performance by2-3x through SQL optimization, materilized views and transient tables. Utilized",
+          "dbt models and seedsfor git version controlled downstream transformations & analytics-ready datasets for BI and reporting.",
+          "Contributed directly toreduced usage costs ($50k+/mo), pipeline maintainability and documented version control."
+        ]
+      },
+      {
+        "role": "Data Scientist and Data Product Manager",
+        "company": "OneCard",
+        "location": "Pune, India",
+        "period": "Jan 2021 – May 2024",
+        "category": "AI/ML & Analytics",
+        "summary": "Developed a data-driven decision making platform for enterprise-scale analytics serving cross-functional teams, implementing.",
+        "bullets": [
+          "Developed a data-driven decision making platform for enterprise-scale analytics serving cross-functional teams, implementing",
+          "Data Mesharchitecture across the organization to drive internal adoption and external scaling",
+          "Designed and delivered end-to-end data products that combined ETL pipelines, APIs, business logic, and ML models, incre-",
+          "mentally boosting thefeature adoption rate by 30%and lifting revenue by increasing interest yield from17% to 19%",
+          "via optimized pricing strategies.",
+          "Built Machine Learning models using Python, achieving85+% accuracyfor customer churn prediction and spend dormancy",
+          "forecasting usingLightGBMtree-based model.",
+          "Feature engineering over high volume credit card transaction data to facilitate multiple model-based initiatives.",
+          "Created multiple supervised learning algorithms (Logistic Regression and Decision Trees) for credit risk modeling,",
+          "propensity modeling, customer segmentation, and predictive analytics",
+          "Marketing and Product Analytics",
+          "Implemented targeted marketing campaigns using ML insights achieving14% user re-engagement and retentionim-",
+          "provement in credit card portfolio, and improving iterations through A/B testing and Design of Experiments (DoE).",
+          "Designed Lifetime Value Analysis (LTV/CAC) and channel-wise performance reports to steer marketing channels/ strategies.",
+          "Performedcohortwise funnel analysis, and behavioral segmentation improving customer onboarding,engagementrates,",
+          "retention KPIs and metrics. Portrayed trends on executive dashboards usingApache SupersetandGoogle Data Studio."
+        ]
+      },
+      {
+        "role": "Associate Consultant",
+        "company": "Auronova Consulting",
+        "location": "Mumbai, India",
+        "period": "Sep 2019 – Dec 2020",
+        "category": "AI/ML & Analytics",
+        "summary": "Process automation leveraging Python and SQL for end-to-end analyses, dashboards, and churn model development.",
+        "bullets": [
+          "Process automation leveraging Python and SQL for end-to-end analyses, dashboards, and churn model development",
+          "Developed real-time interactive dashboard for clients enabling end-to-end metrics tracking for multiple clients"
+        ]
+      }
+    ],
+    "internships": [
+      {
+        "role": "Intern",
+        "company": "Genpact",
+        "location": "Bengaluru",
+        "period": "May 2017 – Jul 2017",
+        "description": "Formative engineering and data analytics projects completed at Genpact."
+      },
+      {
+        "role": "Data Science Intern",
+        "company": "Fractal Analytics",
+        "location": "Mumbai",
+        "period": "May 2018 – Jul 2018",
+        "description": "Formative engineering and data analytics projects completed at Fractal Analytics."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Dual Degree (B.Tech + M.Tech)",
+        "institution": "Indian Institute of Technology, IIT Kharagpur",
+        "period": "Jul 2014 – Aug 2019",
+        "field": ""
+      }
+    ],
+    "title": "Ashish Vineet | Data Science & Engineering Portfolio",
+    "meta_description": "Portfolio and case studies of Ashish Vineet, Senior Technical Associate & AI Systems Architect."
+  },
+  "content_meta": {
+    "matched_work_count": 8,
+    "matched_work_cases": [
+      {
+        "company": "Sears",
+        "file": "02-sears-cdc-snowflake.md",
+        "path": "/Users/ashish/Documents/playground/personal-website-portfolio/content/work/02-sears-cdc-snowflake.md"
+      },
+      {
+        "company": "Sears",
+        "file": "01-sears-agentic-workflow.md",
+        "path": "/Users/ashish/Documents/playground/personal-website-portfolio/content/work/01-sears-agentic-workflow.md"
+      },
+      {
+        "company": "Sears",
+        "file": "03-onecard-data-mesh.md",
+        "path": "/Users/ashish/Documents/playground/personal-website-portfolio/content/work/03-onecard-data-mesh.md"
+      },
+      {
+        "company": "OneCard",
+        "file": "02-sears-cdc-snowflake.md",
+        "path": "/Users/ashish/Documents/playground/personal-website-portfolio/content/work/02-sears-cdc-snowflake.md"
+      },
+      {
+        "company": "OneCard",
+        "file": "05-auronova-risk-analytics.md",
+        "path": "/Users/ashish/Documents/playground/personal-website-portfolio/content/work/05-auronova-risk-analytics.md"
+      },
+      {
+        "company": "OneCard",
+        "file": "04-onecard-churn-engine.md",
+        "path": "/Users/ashish/Documents/playground/personal-website-portfolio/content/work/04-onecard-churn-engine.md"
+      },
+      {
+        "company": "OneCard",
+        "file": "03-onecard-data-mesh.md",
+        "path": "/Users/ashish/Documents/playground/personal-website-portfolio/content/work/03-onecard-data-mesh.md"
+      },
+      {
+        "company": "Auronova Consulting",
+        "file": "05-auronova-risk-analytics.md",
+        "path": "/Users/ashish/Documents/playground/personal-website-portfolio/content/work/05-auronova-risk-analytics.md"
+      }
+    ],
+    "scaffolded_cases": []
+  }
 }

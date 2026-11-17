@@ -158,10 +158,29 @@ def build():
             shutil.copytree(src_sub, DIST / 'src' / sub, dirs_exist_ok=True)
             print(f'  copied templates/{sub}')
 
+    # Synchronize latest resume from ref/resume/ into src/assets/
+    ref_resume_dir = ROOT / 'ref' / 'resume'
+    if ref_resume_dir.is_dir():
+        pdfs = sorted(ref_resume_dir.glob('*.pdf'), key=lambda p: p.stat().st_mtime, reverse=True)
+        if pdfs:
+            latest_pdf = pdfs[0]
+            shutil.copy2(latest_pdf, ASSETS / 'resume.pdf')
+            shutil.copy2(latest_pdf, ASSETS / latest_pdf.name)
+            print(f'  synchronized resume: {latest_pdf.name} -> src/assets/resume.pdf')
+
     src_dir = ROOT / 'src'
     if src_dir.exists():
         _copy_without_pycache(src_dir, DIST / 'src')
         print('  copied src/')
+
+    # Mirror src/assets directly to dist/assets and dist/resume.pdf for URL routing compatibility
+    if ASSETS.exists():
+        shutil.copytree(ASSETS, DIST / 'assets', dirs_exist_ok=True)
+        print('  copied assets/ -> dist/assets/')
+        if (ASSETS / 'resume.pdf').exists():
+            shutil.copy2(ASSETS / 'resume.pdf', DIST / 'resume.pdf')
+            print('  copied resume.pdf -> dist/resume.pdf')
+
     if (ROOT / 'content').exists():
         shutil.copytree(ROOT / 'content', DIST / 'content', dirs_exist_ok=True)
         print('  copied content/')

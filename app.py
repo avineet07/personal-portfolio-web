@@ -121,6 +121,23 @@ def index():
 # Whitelist of allowed file extensions for serving (Fix #4)
 _ALLOWED_EXTENSIONS = {'.pdf', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico'}
 
+@app.route('/assets/<path:filename>')
+def serve_assets(filename):
+    """Serve static assets directly from src/assets/."""
+    asset_path = os.path.join('src', 'assets', filename)
+    if os.path.isfile(asset_path):
+        return send_from_directory(os.path.join('src', 'assets'), filename)
+    return "File Not Found", 404
+
+@app.route('/resume.pdf')
+def serve_resume():
+    """Serve the active resume directly."""
+    for candidate in ['resume.pdf', 'CV_AshishVineet.pdf']:
+        path = os.path.join('src', 'assets', candidate)
+        if os.path.isfile(path):
+            return send_from_directory(os.path.join('src', 'assets'), candidate, mimetype='application/pdf')
+    return "File Not Found", 404
+
 @app.route('/<path:filename>')
 def serve_root_file(filename):
     """Serves static files located in the root directory (like PDFs and images)."""
